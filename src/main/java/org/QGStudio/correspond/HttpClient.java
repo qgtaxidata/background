@@ -49,7 +49,7 @@ public class HttpClient {
     public String doPostWithParam(Object object) throws JsonProcessingException {
 
         // 建立post请求
-        HttpPost httpPost = new HttpPost("http://localhost:12345/doPostControllerTwo");
+        HttpPost httpPost = new HttpPost("http://192.168.31.89:8080/taxi/api/v1.0/hotspot");
         // 转换成json对象
         StringEntity entity = new StringEntity(objectMapper.writeValueAsString(object), "UTF-8");
         // 加入post请求中
@@ -69,8 +69,8 @@ public class HttpClient {
             if (responseEntity != null) {
 
                 log.info("响应内容长度为:{}",responseEntity.getContentLength());
-                log.info("响应内容为:{}" , EntityUtils.toString(responseEntity));
                 responseContent = EntityUtils.toString(responseEntity);
+                log.info("响应内容为:{}" , responseContent);
             }
         } catch (IOException e) {
             e.printStackTrace();

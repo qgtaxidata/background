@@ -16,26 +16,19 @@ public class DigitUtil {
 
         String longitude = String.valueOf(location.getLongitude());
         String latitude = String.valueOf(location.getLatitude());
-        int length_long = longitude.split(".")[1].length();
-        int length_la = latitude.split(".")[1].length();
-        if (length_long > 6) {
-            longitude = longitude.split(".")[0] + longitude.split(".")[1].substring(0, 5);
+        int length_long = longitude.substring(longitude.lastIndexOf(".") + 1).length();
+        int length_la = latitude.substring(latitude.lastIndexOf(".") + 1).length();
+
+        while (length_long < 6) {
+            longitude = longitude + "0";
+            length_long++;
         }
-        else {
-            while (length_long < 6) {
-                longitude = longitude + "0";
-                length_long++;
-            }
+
+        while (length_la < 6) {
+            latitude = latitude + "0";
+            length_la++;
         }
-        if (length_la > 6) {
-            latitude = latitude.split(".")[0] + latitude.split(".")[1].substring(0, 5);
-        }
-        else {
-            while (length_la < 6) {
-                latitude = latitude + "0";
-                length_la++;
-            }
-        }
+
         location.setLongitude(Double.parseDouble(longitude));
         location.setLatitude(Double.parseDouble(latitude));
         return location;
