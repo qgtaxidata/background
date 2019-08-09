@@ -43,8 +43,8 @@ public class HotspotServiceImpl implements HotspotService {
         }
         //将传进来的经纬度设置为6位小数
         location = DigitUtil.checkLocationDigit(location);
-        //对time进行切割到分钟，去除秒的部分
 
+        //对time进行切割到分钟，去除秒的部分
         try {
             location.setTime(TimeUtil.formatTime(location.getTime()));
         } catch (ParseException e) {
