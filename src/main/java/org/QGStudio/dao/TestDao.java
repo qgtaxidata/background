@@ -26,4 +26,12 @@ public interface TestDao {
             @Result(column = "geohash", property = "geohash")
     })
     List<LocationWithHeight> findLocation(String geohash);
+
+
+    @Select("select longitude , latitude from gpsdata1 where GPS_TIME > '2017-02-01 16:19:00'  AND GPS_TIME < '2017-02-01 16:34:05' and  LICENSEPLATENO='粤A524TF'")
+    @Results(id="nima",value = {
+            @Result(column = "longitude", property = "longitude"),
+            @Result(column = "latitude", property = "latitude"),
+    })
+    List<Location> findHUANGYUQISB();
 }

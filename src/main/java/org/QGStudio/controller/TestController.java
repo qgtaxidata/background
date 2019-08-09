@@ -7,6 +7,7 @@ import org.QGStudio.model.LocationWithHeight;
 import org.QGStudio.model.Point;
 import org.QGStudio.model.User;
 import org.QGStudio.service.TestService;
+import org.QGStudio.util.GCJ02_WGS84;
 import org.QGStudio.util.GeoHashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -46,5 +47,19 @@ public class TestController {
 
 
         return new ResultBean<>();
+    }
+
+    @RequestMapping("/test1")
+    public ResultBean<?> testGet(){
+
+
+        List<Location> huangyuqisb = testDao.findHUANGYUQISB();
+        List<LocationWithHeight> list = new ArrayList<>();
+        for (Location location:
+            huangyuqisb ) {
+            LocationWithHeight locationWithHeight = GCJ02_WGS84.wgs84_To_Gcj02(location.getLatitude(), location.getLongitude());
+            list.add(locationWithHeight);
+        }
+        return new ResultBean<>(list);
     }
 }
