@@ -1,6 +1,7 @@
 package org.QGStudio.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.extern.log4j.Log4j2;
 import org.QGStudio.correspond.HttpClient;
 import org.QGStudio.exception.CheckException;
 import org.QGStudio.model.Location;
@@ -23,6 +24,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2019-08-08 19:32
  */
 @Service
+@Log4j2
 public class HotspotServiceImpl implements HotspotService {
 
 
@@ -44,14 +46,12 @@ public class HotspotServiceImpl implements HotspotService {
         //将传进来的经纬度设置为6位小数
         location = DigitUtil.checkLocationDigit(location);
         //对time进行切割到分钟，去除秒的部分
-
         try {
             location.setTime(TimeUtil.formatTime(location.getTime()));
         } catch (ParseException e) {
             e.printStackTrace();
             throw new CheckException("参数异常，请检查!");
         }
-
         String reponse = clientBean.getObject().doPostWithParam(location);
 
         if (VerifyUtil.isEmpty(reponse)) {
