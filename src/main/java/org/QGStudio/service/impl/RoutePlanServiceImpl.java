@@ -12,12 +12,13 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
 
 /**
  * @ClassName RoutePlanServiceImpl
  * @Description TODO
- * @Author huange7
+ * @Author huange7, guo
  * @Date 2019-08-09 15:55
  * @Version 1.0
  */
@@ -27,6 +28,35 @@ public class RoutePlanServiceImpl implements RoutePlanService {
 
     @Autowired
     private ObjectFactory<HttpClient> clientBean;
+
+    /**
+     * 查询单条路线
+     * @param time
+     * @param routeId
+     * @return
+     * @throws JsonProcessingException
+     */
+
+    @Override
+    public String findSingleRoute(String time, int routeId) throws JsonProcessingException {
+
+        log.info("用户请求查询单条路线，时间为：[时间]：{}",time);
+        log.info("用户请求查询单条路线，路线id为：[路线id]：{}",routeId);
+        //时间是否为空
+        if (VerifyUtil.isEmpty(time)) {
+            throw new CheckException("时间参数不能为空！");
+        }
+        //路线Id是否为空
+        if (VerifyUtil.isEmpty(routeId)) {
+            throw new CheckException("路线id不能为空！");
+        }
+        String response = clientBean.getObject().doPostWithParam(new Object[]{time, routeId});
+        if (VerifyUtil.isEmpty(response)) {
+            throw new CheckException("网络通讯异常！请重试！");
+        }
+        log.info("获取到数据挖掘组的响应,长度为：{}",response.length());
+        return response;
+    }
 
     /**
      * @title : 查询所有的路径
@@ -59,7 +89,9 @@ public class RoutePlanServiceImpl implements RoutePlanService {
         if (VerifyUtil.isEmpty(response)) {
             throw new CheckException("网络通讯异常！请重试！");
         }
+
         log.info("获取到数据挖掘组的响应,长度为：{}",response.length());
+
 
         return response;
 
