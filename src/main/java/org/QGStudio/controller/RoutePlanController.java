@@ -1,12 +1,6 @@
 package org.QGStudio.controller;
 
 
-        import com.fasterxml.jackson.core.JsonProcessingException;
-        import org.QGStudio.dtos.ResultBean;
-        import org.QGStudio.model.Location;
-        import org.QGStudio.service.RoutePlanService;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.QGStudio.dtos.ResultBean;
 import org.QGStudio.model.Location;
@@ -14,7 +8,6 @@ import org.QGStudio.service.RoutePlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-        import java.util.List;
 
 /**
  * @ClassName RoutePlanController
