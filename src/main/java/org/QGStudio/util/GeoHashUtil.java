@@ -14,30 +14,30 @@ import org.QGStudio.model.LocationWithHeight;
  */
 public class GeoHashUtil {
 
-        public static String[] findNeighborGeohash(Location location){
+    public static GeoHash[] findNeighborGeohash(Location location){
 
-            // 给出经纬度，设置geohash块的级别大小为5
-            GeoHash center = GeoHash.withCharacterPrecision(location.getLatitude(), location.getLongitude(), 5);
-            // 找到该点的上方的geohash块
-            GeoHash top = center.getNorthernNeighbour();
-            // 找到该点的下方的geohash块
-            GeoHash bottom = center.getSouthernNeighbour();
-            // 找到该点的左边的geohash块
-            GeoHash left = center.getWesternNeighbour();
-            // 找到该点的右边的geohash块
-            GeoHash right = center.getEasternNeighbour();
-            // 找到该点的左上方的geohash块
-            GeoHash topLeft = top.getWesternNeighbour();
-            // 找到该点的右上方的geohash块
-            GeoHash topRight = top.getEasternNeighbour();
-            // 找到该点的左下方的geohash块
-            GeoHash bottomLeft = bottom.getWesternNeighbour();
-            // 找到该点的右下方的geohash块
-            GeoHash bottomRight = bottom.getEasternNeighbour();
-            // 将它们转化为字符传并返回
-            return new String[]{center.toString(),top.toString(),bottom.toString(),left.toString(),right.toString(),topLeft.toString(),topRight.toString()
-            ,bottomLeft.toString(),bottomRight.toString()};
-        }
+        // 给出经纬度，设置geohash块的级别大小为5
+        GeoHash center = GeoHash.withCharacterPrecision(location.getLatitude(), location.getLongitude(), 5);
+        // 找到该点的上方的geohash块
+        GeoHash top = center.getNorthernNeighbour();
+        // 找到该点的下方的geohash块
+        GeoHash bottom = center.getSouthernNeighbour();
+        // 找到该点的左边的geohash块
+        GeoHash left = center.getWesternNeighbour();
+        // 找到该点的右边的geohash块
+        GeoHash right = center.getEasternNeighbour();
+        // 找到该点的左上方的geohash块
+        GeoHash topLeft = top.getWesternNeighbour();
+        // 找到该点的右上方的geohash块
+        GeoHash topRight = top.getEasternNeighbour();
+        // 找到该点的左下方的geohash块
+        GeoHash bottomLeft = bottom.getWesternNeighbour();
+        // 找到该点的右下方的geohash块
+        GeoHash bottomRight = bottom.getEasternNeighbour();
+        // 将它们转化为字符传并返回
+        return new GeoHash[]{center,top,bottom,left,right,topLeft,topRight
+                ,bottomLeft,bottomRight};
+    }
 
         /**
          * @title : 将wgs84坐标转化为gcj02坐标
