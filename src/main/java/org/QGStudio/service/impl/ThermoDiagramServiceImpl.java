@@ -4,6 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import org.QGStudio.dao.LocationDao;
 import org.QGStudio.model.Location;
 import org.QGStudio.model.LocationWithHeight;
+import org.QGStudio.model.Point;
 import org.QGStudio.service.ThermoDiagramService;
 import org.QGStudio.util.GeoHashUtil;
 import org.QGStudio.util.TableUtil;
@@ -37,6 +38,7 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
      */
     @Override
     public List findHeatMap(Location location) throws ParseException {
+        long time = System.currentTimeMillis();
         // 根据该坐标到当相邻的八块geohash块
         // 这里返回的是9块，包含它本身
         String[] strings = GeoHashUtil.findNeighborGeohash(location);
@@ -54,7 +56,7 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
             Date endDate = format.parse(location.getTime());
             // 这里设置间隔为5秒，后期考虑要不要进行修改
             // TODO 这里设置时间间隔为5秒，建议可调整该值
-            endDate.setSeconds(endDate.getSeconds()+5);
+            endDate.setSeconds(endDate.getSeconds()+ 15);
 
             // 根据开始的时间查看对应的数据库表
             String table = TableUtil.getTable(startDate);
@@ -63,14 +65,20 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
         }
         // 记录日志，用户执行查询9个geohash5 成功
 
-
+        List<Point> points = new ArrayList<>();
 
         // 遍历找到的七级geohash块，并将该块的中心点的经纬度设置为该块代表的经纬度
         for (LocationWithHeight locationWithHeight:locations) {
-            locationWithHeight.setLatitude(GeoHashUtil.geohash2Location(locationWithHeight.getGeohash()).getLatitude());
-            locationWithHeight.setLongitude(GeoHashUtil.geohash2Location(locationWithHeight.getGeohash()).getLongitude());
+/*            locationWithHeight.setLatitude(GeoHashUtil.geohash2Location(locationWithHeight.getGeohash()).getLatitude());
+            locationWithHeight.setLongitude(GeoHashUtil.geohash2Location(locationWithHeight.getGeohash()).getLongitude());*/
+            Point point = new Point();
+            point.setLng(GeoHashUtil.geohash2Location(locationWithHeight.getGeohash()).getLongitude());
+            point.setLat(GeoHashUtil.geohash2Location(locationWithHeight.getGeohash()).getLatitude());
+            point.setCount(locationWithHeight.getCount());
+            points.add(point);
         }
-        log.info("用户成功查询所有的geohash块并返回对应的坐标点和权重");
-        return locations;
+        log.info("用户成功查询所有的geohash块并返回对应的坐标点和权重,数据量为{}",points.size());
+        System.out.println(System.currentTimeMillis()-time);
+        return points;
     }
 }

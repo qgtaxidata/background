@@ -19,6 +19,7 @@ package org.QGStudio.controller;
  */
 @RestController
 @RequestMapping("/route")
+@CrossOrigin
 public class RoutePlanController {
 
     @Autowired

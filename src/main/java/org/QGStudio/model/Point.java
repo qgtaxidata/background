@@ -1,6 +1,7 @@
 package org.QGStudio.model;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @ClassName Point
@@ -10,6 +11,7 @@ import lombok.Data;
  * @Version 1.0
  */
 @Data
+@Accessors(chain = true)
 public class Point {
     Double lng;
     Double  lat;
