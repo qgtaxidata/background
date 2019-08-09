@@ -44,30 +44,7 @@ public class TestController {
     @RequestMapping("/test")
     public ResultBean<?> testFind(@RequestBody Location location, HttpServletResponse httpServletResponse){
 
-        String[] strings = GeoHashUtil.findNeighborGeohash(location);
-        List<LocationWithHeight> locations = new LinkedList<>();
-        for (String s :
-                strings) {
-            System.out.println(s);
-            locations.addAll(testDao.findLocation(s.substring(s.lastIndexOf(" ")+1)+"%"));
-        }
-        Map<String ,Integer> map = new HashMap<>();
-        for (LocationWithHeight locationWithHeight: locations) {
-            if(!map.containsKey(locationWithHeight.getGeohash())){
-                map.put(locationWithHeight.getGeohash(),1);
-            }else{
-                map.put(locationWithHeight.getGeohash(),map.get(locationWithHeight.getGeohash())+1);
-            }
-        }
-        List points = new LinkedList();
-        Set<String> keys = map.keySet();
-        for (String k:
-                keys) {
-            LocationWithHeight locationWithHeight =GeoHashUtil.geohash2Location(k);
-            locationWithHeight.setCount(map.get(k));
-            points.add(locationWithHeight);
-            System.out.println(locationWithHeight.toString());
-        }
-        return new ResultBean<>(points);
+
+        return new ResultBean<>();
     }
 }
