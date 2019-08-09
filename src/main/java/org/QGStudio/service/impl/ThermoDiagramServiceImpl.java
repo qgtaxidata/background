@@ -70,7 +70,7 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
             locationWithHeight.setLatitude(GeoHashUtil.geohash2Location(locationWithHeight.getGeohash()).getLatitude());
             locationWithHeight.setLongitude(GeoHashUtil.geohash2Location(locationWithHeight.getGeohash()).getLongitude());
         }
-        log.info("用户成功查询所有的geohas块并返回对应的坐标点和权重");
+        log.info("用户成功查询所有的geohash块并返回对应的坐标点和权重");
         return locations;
     }
 }
