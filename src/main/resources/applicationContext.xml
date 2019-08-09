@@ -35,7 +35,7 @@
         <property name="minIdle" value="1" />
         <!-- 等待超时时间-->
         <property name="maxWait" value="1000"/>
-        <property name="filters" value="stat" />
+        <property name="filters" value="stat,log4j2" />
     </bean>
 
     <!-- druid spring监控-->
@@ -86,6 +86,7 @@
     <!-- DAO接口所在的包-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer" id="mapperScannerConfigurer">
         <property name="basePackage" value="org.QGStudio.dao"/>
+
     </bean>
 
     <!-- 事务管理器-->
@@ -95,10 +96,10 @@
 
     <!-- 事务通知 -->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
-        <tx:attributes>
-            <tx:method name="find*" read-only="true"/>
-            <tx:method name="*" isolation="DEFAULT"/>
-        </tx:attributes>
+<!--        <tx:attributes>-->
+<!--            <tx:method name="find*" read-only="true"/>-->
+<!--            <tx:method name="*" isolation="DEFAULT"/>-->
+<!--        </tx:attributes>-->
     </tx:advice>
     <!-- AOP增强-->
     <aop:config>
