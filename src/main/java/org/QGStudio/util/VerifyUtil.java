@@ -66,6 +66,10 @@ public class VerifyUtil {
         return false;
     }
 
+    public static boolean isEmpty(Integer integer) {
+       return (null == integer);
+    }
+
 
 
 }
