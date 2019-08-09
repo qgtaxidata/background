@@ -2,6 +2,7 @@ package org.QGStudio.service;
 
 import org.QGStudio.model.Location;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -12,5 +13,5 @@ import java.util.List;
  * @Version 1.0
  */
 public interface ThermoDiagramService {
-    List findHeatMap(Location location);
+    List findHeatMap(Location location) throws ParseException;
 }

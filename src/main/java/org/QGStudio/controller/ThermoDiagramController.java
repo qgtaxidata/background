@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+
 /**
  * @ClassName ThermoDiagramController
  * @Description TODO
@@ -24,7 +26,7 @@ public class ThermoDiagramController {
     ThermoDiagramService thermoDiagramService;
 
     @PostMapping("/getMap")
-    public ResultBean<?> getMap(@RequestBody Location location){
+    public ResultBean<?> getMap(@RequestBody Location location) throws ParseException {
         return new ResultBean<>(thermoDiagramService.findHeatMap(location));
     }
 

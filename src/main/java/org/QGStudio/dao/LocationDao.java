@@ -1,6 +1,7 @@
 package org.QGStudio.dao;
 
 import org.QGStudio.model.LocationWithHeight;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
@@ -17,11 +18,12 @@ import java.util.List;
 public interface LocationDao {
 
 
-    @Select("select longitude , latitude , geohash from #{table} where GPS_TIME > #{startTime}  AND GPS_TIME < #{endTime} and GEOHASH like #{geohash}")
+    @Select("select  geohash,count(*) as height from ${table} where GPS_TIME > #{startTime} " +
+            " AND GPS_TIME < #{endTime} and GEOHASH like #{geohash} group by geohash")
     @Results(id="locationMap",value = {
-            @Result(column = "longitude", property = "longitude"),
-            @Result(column = "latitude", property = "latitude"),
-            @Result(column = "geohash", property = "geohash")
+            @Result(column = "geohash", property = "geohash"),
+            @Result(column = "height", property = "count")
     })
-    List<LocationWithHeight> findLocation(String table,String startTime,String endTime,String geohash);
+    List<LocationWithHeight> findLocation(@Param(value = "table") String table, @Param(value = "startTime")String startTime,@Param(value = "endTime") String endTime, @Param(value =
+            "geohash")String geohash);
 }
