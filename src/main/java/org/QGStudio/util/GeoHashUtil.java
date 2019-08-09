@@ -14,7 +14,7 @@ import org.QGStudio.model.LocationWithHeight;
  */
 public class GeoHashUtil {
 
-        public static String[] findNeighborGeohash(Location location){
+        public static GeoHash[] findNeighborGeohash(Location location){
 
             // 给出经纬度，设置geohash块的级别大小为5
             GeoHash center = GeoHash.withCharacterPrecision(location.getLatitude(), location.getLongitude(), 5);
@@ -35,8 +35,8 @@ public class GeoHashUtil {
             // 找到该点的右下方的geohash块
             GeoHash bottomRight = bottom.getEasternNeighbour();
             // 将它们转化为字符传并返回
-            return new String[]{center.toString(),top.toString(),bottom.toString(),left.toString(),right.toString(),topLeft.toString(),topRight.toString()
-            ,bottomLeft.toString(),bottomRight.toString()};
+            return new GeoHash[]{center,top,bottom,left,right,topLeft,topRight
+            ,bottomLeft,bottomRight};
         }
 
         /**

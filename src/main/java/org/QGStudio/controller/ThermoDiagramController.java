@@ -13,7 +13,7 @@ import java.text.ParseException;
 
 /**
  * @ClassName ThermoDiagramController
- * @Description TODO
+ * @Description
  * @Author huange7
  * @Date 2019-08-09 10:34
  * @Version 1.0
