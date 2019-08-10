@@ -1,10 +1,14 @@
 package org.QGStudio.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * @ClassName Location
- * @Description TODO
+ * @Description
  * @Author huange7
  * @Date 2019-08-08 21:07
  * @Version 1.0
@@ -13,6 +17,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Accessors(chain = true)
 public class Location {
 
     // 经度
