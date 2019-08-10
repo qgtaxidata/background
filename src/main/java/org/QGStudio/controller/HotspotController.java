@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.ParseException;
 
 /**
@@ -29,8 +30,12 @@ public class HotspotController {
     @RequestMapping(value = "/findHotspot")
     public ResultBean<?> findHotspot(@RequestBody Location location , HttpServletResponse httpServletResponse) throws JsonProcessingException {
 
-        log.info(location);
-        return new ResultBean<>(hotspotService.findHotspot(location));
-
+        try {
+            log.info(location);
+            return new ResultBean<>(hotspotService.findHotspot(location));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ResultBean<>(new CheckException("未知错误,请重试!"));
     }
 }
