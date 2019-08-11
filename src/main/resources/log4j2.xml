@@ -9,7 +9,7 @@
 
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+            <PatternLayout charset="UTF-8" pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
         </Console>
 
         <RollingFile name="running-log" fileName="${LOG_HOME}/runLogs/${FILE_NAME}-${date:yyyy-MM-dd}.log"

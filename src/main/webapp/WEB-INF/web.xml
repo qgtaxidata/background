@@ -93,7 +93,4 @@
     <dispatcher>ERROR</dispatcher>
   </filter-mapping>
   <!-- log4j2-end -->
-  <welcome-file-list>
-    <welcome-file>aa.html</welcome-file>
-  </welcome-file-list>
 </web-app>

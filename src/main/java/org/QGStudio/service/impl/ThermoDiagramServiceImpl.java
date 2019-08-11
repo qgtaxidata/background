@@ -9,6 +9,7 @@ import org.QGStudio.model.LocationWithHeight;
 import org.QGStudio.model.Point;
 import org.QGStudio.runnable.FindGeohashRUnnable;
 import org.QGStudio.service.ThermoDiagramService;
+import org.QGStudio.util.GCJ02_WGS84;
 import org.QGStudio.util.GeoHashUtil;
 import org.QGStudio.util.TableUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,8 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
     @Override
     public List findHeatMap(Location location) throws ParseException {
 
+        location = GCJ02_WGS84.gcj02_To_Wgs84(location.getLatitude(),location.getLongitude()).setTime(location.getTime());
+
         log.info("the request location is "+location);
         // 根据该坐标到当相邻的八块geohash块
         // 这里返回的是9块，包含它本身
@@ -54,7 +57,6 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
         List<LocationWithHeight> locations = new Vector();
         //计数器
         CountDownLatch countDownLatch = new CountDownLatch(geoHashes.length);
-        ExecutorService e = new ThreadPoolExecutor(4, 16, 6000, TimeUnit.MINUTES, new SynchronousQueue<>());
 
         // 遍历geohash块，并在数据库中查找该geohash块对应的子geohash块
         for (GeoHash geoHash : geoHashes) {
@@ -73,7 +75,7 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
             String table = TableUtil.getTable(startDate);
             // 将查到的数据整合到List中
             log.info("开启一个线程查询热力图数据");
-            FindGeohashRUnnable findGeohashRUnnable = new FindGeohashRUnnable(table, startDate, endDate,
+             FindGeohashRUnnable findGeohashRUnnable = new FindGeohashRUnnable(table, startDate, endDate,
                     geoHash.getBoundingBox(), locations, locationDao, countDownLatch);
 //            threadPoolTaskExecutor.execute(findGeohashRUnnable);
             new Thread(findGeohashRUnnable).start();
@@ -86,9 +88,10 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
         } catch (InterruptedException ex) {
             ex.printStackTrace();
             throw new CheckException("查询热力图失败");
-        } finally {
-            e.shutdownNow();
         }
+
+        log.info("Locations:"+locations.size());
+
         //统计权重
         Map<String, Integer> map = new HashMap();
         for (LocationWithHeight locationWithHeight : locations) {
@@ -117,6 +120,7 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
 //            locationWithHeight.setLongitude(GeoHashUtil.geohash2Location(locationWithHeight.getGeohash()).getLongitude());
 //        }
         log.info("用户成功查询所有的geohash块并返回对应的坐标点和权重");
+        log.info("数据量："+points.size());
         return points;
     }
 }

@@ -27,7 +27,7 @@ public class HotspotController {
     @Autowired
     private HotspotService hotspotService;
 
-    @RequestMapping(value = "/findHotspot")
+    @RequestMapping(value = "/findHotspo")
     public ResultBean<?> findHotspot(@RequestBody Location location, HttpServletResponse httpServletResponse) throws JsonProcessingException {
 
         log.info(location);

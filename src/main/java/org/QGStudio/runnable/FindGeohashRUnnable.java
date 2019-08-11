@@ -1,7 +1,7 @@
 package org.QGStudio.runnable;
 
 import ch.hsr.geohash.BoundingBox;
-import ch.hsr.geohash.GeoHash;
+import lombok.extern.log4j.Log4j2;
 import org.QGStudio.dao.LocationDao;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -15,6 +15,7 @@ import java.util.concurrent.CountDownLatch;
  * @description
  * @date 2019-08-09 15:33
  */
+@Log4j2
 public class FindGeohashRUnnable implements Runnable {
 
     /**
@@ -63,8 +64,11 @@ public class FindGeohashRUnnable implements Runnable {
      */
     @Override
     public void run() {
-        list.addAll(locationDao.findLocation(table,boundingBox.getMaxLon(),boundingBox.getMinLon(),
-                boundingBox.getMaxLat(),boundingBox.getMinLat(),startTime,endTime));
+        log.info(new Date().toLocaleString()+"开始SQL查询");
+                list.addAll(locationDao.findLocation(table, boundingBox.getMaxLon(), boundingBox.getMinLon(),
+                boundingBox.getMaxLat(), boundingBox.getMinLat(), startTime, endTime));
         countDownLatch.countDown();
+        log.info(new Date().toLocaleString()+"结束SQL查询");
+
     }
 }
