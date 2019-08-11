@@ -29,7 +29,7 @@ public class ControllerAop {
             result = (ResultBean<?>) pjp.proceed();
 
         } catch (Throwable e) {
-
+            e.printStackTrace();
             result = handlerException(pjp, e);
         }
 
@@ -41,11 +41,11 @@ public class ControllerAop {
 
         // 已知异常
         if (e instanceof CheckException) {
-
+            e.printStackTrace();
             result.setMsg(e.getLocalizedMessage());
             result.setCode(ResultBean.FAIL);
         } else if (e instanceof NullPointerException){
-
+            e.printStackTrace();
             result.setMsg("错误!参数不匹配");
             result.setCode(ResultBean.FAIL);
         } else {

@@ -4,7 +4,6 @@ import org.QGStudio.correspond.HttpClient;
 import org.QGStudio.dao.TestDao;
 import org.QGStudio.model.User;
 import org.QGStudio.service.TestService;
-import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -4,12 +4,10 @@ package org.QGStudio.dao;
 import org.QGStudio.model.Location;
 import org.QGStudio.model.LocationWithHeight;
 import org.QGStudio.model.User;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -26,4 +24,7 @@ public interface TestDao {
             @Result(column = "geohash", property = "geohash")
     })
     List<LocationWithHeight> findLocation(String geohash);
+
+    @Select("SELECT LICENSEPLATENO from gpsdata1 where gps_time between \"2017-02-01 15:00:00\" and \"2017-02-01 15:00:15\"")
+    List<String> findPlateno(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
 }

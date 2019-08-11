@@ -4,19 +4,25 @@ import ch.hsr.geohash.BoundingBox;
 import ch.hsr.geohash.GeoHash;
 import lombok.extern.log4j.Log4j2;
 import org.QGStudio.dao.LocationDao;
+import org.QGStudio.exception.CheckException;
+import org.QGStudio.model.AreaLocation;
 import org.QGStudio.model.Location;
 import org.QGStudio.model.LocationWithHeight;
 import org.QGStudio.model.Point;
+import org.QGStudio.runnable.NewFindGeoHashRunnable;
 import org.QGStudio.service.ThermoDiagramService;
+import org.QGStudio.util.GCJ02_WGS84;
 import org.QGStudio.util.GeoHashUtil;
 import org.QGStudio.util.TableUtil;
+import org.QGStudio.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName ThermoDiagramServiceImpl
@@ -32,17 +38,20 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
     private LocationDao locationDao;
 
     /**
-     * @title : 根据经纬度找到对应的热力图
      * @param :[location]
      * @return : java.util.List
+     * @title : 根据经纬度找到对应的热力图
      * @author : huange7
      * @date : 2019-08-09 14:23
      */
     @Override
     public List findHeatMap(Location location) throws ParseException {
-        long time = System.currentTimeMillis();
         // 根据该坐标到当相邻的八块geohash块
         // 这里返回的是9块，包含它本身
+
+        location = GCJ02_WGS84.gcj02_To_Wgs84(location.getLatitude(), location.getLongitude()).setTime(location.getTime());
+
+
         GeoHash[] geoHashes = GeoHashUtil.findNeighborGeohash(location);
         List<LocationWithHeight> locations = new LinkedList<>();
 
@@ -52,23 +61,59 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
 
             BoundingBox boundingBox = geoHash.getBoundingBox();
 
-            // 设置时间格式为 yyyy-MM-dd HH:mm:ss ,对应数据库的GPS_TIME字段的格式
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
             // 调用location的时间，并计算此时的终止时间
-            Date startDate = format.parse( location.getTime());
-            Date endDate = format.parse(location.getTime());
+            Date startDate = TimeUtil.StrToDate(location.getTime());
+            Date endDate = TimeUtil.StrToDate(location.getTime());
             // 这里设置间隔为5秒，后期考虑要不要进行修改
             // TODO 这里设置时间间隔为5秒，建议可调整该值
-            endDate.setSeconds(endDate.getSeconds()+ 15);
+            endDate.setSeconds(startDate.getSeconds() + 15);
 
             // 根据开始的时间查看对应的数据库表
-            String table = TableUtil.getTable(startDate);
-            // 将查到的数据整合到List中
-          /*  locations.addAll(locationDao.findLocation(table,format.format(startDate),format.format(endDate),s.substring(s.lastIndexOf(" ")+1)+"%"));*/
-            locations.addAll(locationDao.findLocation(table,boundingBox.getMaxLon(),boundingBox.getMinLon(),
-                    boundingBox.getMaxLat(),boundingBox.getMinLat(),startDate,endDate));
+            String table = TableUtil.getGpsdataTable(startDate);
+
+            // 查询数据库中每个5级块中的七级块
+            locations.addAll(locationDao.findLocation(table, boundingBox.getMaxLon(), boundingBox.getMinLon(),
+                    boundingBox.getMaxLat(), boundingBox.getMinLat(), startDate, endDate));
         }
+
+        // 调用计算权重方法并返回计算出的列表
+        return statisticalWeight(locations);
+    }
+
+    /**
+     * @param :[maxLon, minLon, maxLat, minLat]
+     * @return : java.util.List
+     * @title : 根据经纬度差给出热力图
+     * @author : huange7
+     * @date : 2019-08-10 13:10
+     */
+    @Override
+    public List findHeadMap(double maxLon, double minLon, double maxLat, double minLat, String time) throws ParseException {
+
+        Location locationMax = new Location().setLatitude(maxLat).setLongitude(maxLon);
+        Location locationMin = new Location().setLatitude(minLat).setLongitude(minLon);
+
+        locationMax = GCJ02_WGS84.gcj02_To_Wgs84(locationMax.getLatitude(), locationMax.getLongitude());
+        locationMin = GCJ02_WGS84.gcj02_To_Wgs84(locationMin.getLatitude(), locationMin.getLongitude());
+
+
+        Date startTime = TimeUtil.StrToDate(time);
+        Date endTime = TimeUtil.StrToDate(time);
+        // 这里设置间隔为5秒，后期考虑要不要进行修改
+        // TODO 这里设置时间间隔为5秒，建议可调整该值
+        endTime.setSeconds(startTime.getSeconds() + 15);
+
+        // 根据开始的时间查看对应的数据库表
+        String table = TableUtil.getGpsdataTable(startTime);
+
+        // 查看dao层对应的七级块的点
+        List<LocationWithHeight> locations = locationDao.findLocation(table, locationMax.getLongitude(), locationMin.getLongitude(), locationMax.getLatitude(),
+                locationMin.getLatitude(), startTime, endTime);
+
+        return statisticalWeight(locations);
+    }
+
+    private List statisticalWeight(List<LocationWithHeight> locations) {
         // 记录日志，用户执行查询9个geohash5 成功
         //统计权重
         Map<String, Integer> map = new HashMap();
@@ -80,7 +125,7 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
             }
         }
 
-//计算坐标
+        //计算坐标
         Set<String> keys = map.keySet();
         List<Point> points = new LinkedList<>();
         for (String k : keys) {
@@ -90,21 +135,81 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
             point.setCount(map.get(k));
             points.add(point);
         }
-
-/*        List<Point> points = new ArrayList<>();
-
-        // 遍历找到的七级geohash块，并将该块的中心点的经纬度设置为该块代表的经纬度
-        for (LocationWithHeight locationWithHeight:locations) {
-*//*            locationWithHeight.setLatitude(GeoHashUtil.geohash2Location(locationWithHeight.getGeohash()).getLatitude());
-            locationWithHeight.setLongitude(GeoHashUtil.geohash2Location(locationWithHeight.getGeohash()).getLongitude());*//*
-            Point point = new Point();
-            point.setLng(GeoHashUtil.geohash2Location(locationWithHeight.getGeohash()).getLongitude());
-            point.setLat(GeoHashUtil.geohash2Location(locationWithHeight.getGeohash()).getLatitude());
-            point.setCount(locationWithHeight.getCount());
-            points.add(point);
-        }
-        log.info("用户成功查询所有的geohash块并返回对应的坐标点和权重,数据量为{}",points.size());
-        System.out.println(System.currentTimeMillis()-time);*/
+        log.info("用户查询成功！返回数据，数据大小为{}", points.size());
         return points;
+    }
+
+    @Autowired
+    ThreadPoolTaskExecutor threadPoolTaskExecutor;
+
+    @Override
+    public List findAreaMap(int area, String time) {
+        List<LocationWithHeight> locations = new LinkedList<>();
+
+
+        Date startTime = TimeUtil.StrToDate(time);
+        Date endTIme = TimeUtil.StrToDate(time);
+        endTIme.setSeconds(endTIme.getSeconds() + 15);
+
+        String table = TableUtil.getGpsdataTable(startTime);
+
+        String[] geoHashes = AreaLocation.AREA_MAP.get(area);
+        List<CountDownLatch> countDownLatches = new LinkedList<>();
+        int count = geoHashes.length % 10 == 0 ? geoHashes.length / 10 : geoHashes.length / 10 + 1;
+        CountDownLatch countDownLatch = new CountDownLatch(count);
+
+        List geoHashList = new LinkedList();
+        for (String geohash : AreaLocation.AREA_MAP.get(area)) {
+            geoHashList.add(geohash);
+            if (geoHashList.size() == 10) {
+                NewFindGeoHashRunnable newFindGeoHashRunnable = new NewFindGeoHashRunnable(table, startTime, endTIme, geoHashList.toArray(), locations, countDownLatch);
+                threadPoolTaskExecutor.execute(newFindGeoHashRunnable);
+                geoHashList = new LinkedList();
+            }
+
+            long start = System.currentTimeMillis();
+            log.info("开启时间,{}", start);
+/*            locations.addAll(locationDao.findLocation(table,boundingBox.getMaxLon(),boundingBox.getMinLon(),boundingBox.getMaxLat(),
+                    boundingBox.getMinLat(),startTime,endTIme));*/
+            long end = System.currentTimeMillis();
+            log.info("共用时,{}", end - start);
+        }
+
+        if(geoHashList.size()!=0){
+            NewFindGeoHashRunnable newFindGeoHashRunnable = new NewFindGeoHashRunnable(table, startTime, endTIme, geoHashList.toArray(), locations, countDownLatch);
+            threadPoolTaskExecutor.execute(newFindGeoHashRunnable);
+        }
+
+        try {
+            countDownLatch.await(30, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new CheckException("查询热力图失败");
+        }
+
+        if (countDownLatch.getCount() != 0) {
+            throw new CheckException("查询热力图超时");
+        }
+
+        return statisticalWeight(locations);
+    }
+
+    @Override
+    public List findMapNow(int area, String time) {
+
+        Date startTime = TimeUtil.StrToDate(time);
+        Date endTime = TimeUtil.StrToDate(time);
+        endTime.setSeconds(endTime.getSeconds() + 15);
+
+        String table = TableUtil.getGpsdataTable(startTime);
+
+        log.info("用户查询地区{}",area);
+        Location maxLocation = AreaLocation.MAX_MAP.get(area);
+        Location minLocation = AreaLocation.MIN_MAP.get(area);
+        log.info("查询的地区数据为:{}",AreaLocation.MAX_MAP.get(area).toString());
+        List<LocationWithHeight> locations = locationDao.findLocation(table,maxLocation.getLongitude(),minLocation.getLongitude(),
+                maxLocation.getLatitude(),minLocation.getLatitude(),startTime,endTime);
+
+        return statisticalWeight(locations);
     }
 }
