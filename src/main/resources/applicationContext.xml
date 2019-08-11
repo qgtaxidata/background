@@ -86,7 +86,6 @@
     <!-- DAO接口所在的包-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer" id="mapperScannerConfigurer">
         <property name="basePackage" value="org.QGStudio.dao"/>
-
     </bean>
 
     <!-- 事务管理器-->
