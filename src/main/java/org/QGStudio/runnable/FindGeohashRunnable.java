@@ -16,32 +16,32 @@ import java.util.concurrent.CountDownLatch;
  * @date 2019-08-09 15:33
  */
 @Log4j2
-public class FindGeohashRUnnable implements Runnable {
+public class FindGeohashRunnable implements Runnable {
 
     /**
      * 操作的表名
      */
-    private String table;
+    protected String table;
     /**
      * 起始时间
      */
-    private Date startTime;
+    protected Date startTime;
     /**
      * 结束时间
      */
-    private Date endTime;
+    protected Date endTime;
 
-    private BoundingBox boundingBox;
+    protected BoundingBox boundingBox;
     /**
      * 容器
      */
-    private List list;
-    private LocationDao locationDao;
-    private CountDownLatch countDownLatch;
+    protected List list;
+    protected LocationDao locationDao;
+    protected CountDownLatch countDownLatch;
 
-    public FindGeohashRUnnable(String table, Date startTime,
+    public FindGeohashRunnable(String table, Date startTime,
                                Date endTime, BoundingBox boundingBox, List list,
-                               LocationDao locationDao, CountDownLatch countDownLatch) {
+                               CountDownLatch countDownLatch) {
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
 
         this.table = table;

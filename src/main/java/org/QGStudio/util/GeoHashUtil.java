@@ -39,16 +39,5 @@ public class GeoHashUtil {
                 ,bottomLeft,bottomRight};
     }
 
-        /**
-         * @title : 将wgs84坐标转化为gcj02坐标
-         * @param :[geohash]
-         * @return : org.QGStudio.model.LocationWithHeight
-         * @author : huange7
-         * @date : 2019-08-09 14:32
-         */
-        public static LocationWithHeight geohash2Location(String geohash){
-            WGS84Point wgs84Point = GeoHash.fromGeohashString(geohash).getPoint();
-            LocationWithHeight location = GCJ02_WGS84.wgs84_To_Gcj02(wgs84Point.getLatitude(),wgs84Point.getLongitude());
-            return location;
-        }
+
 }
