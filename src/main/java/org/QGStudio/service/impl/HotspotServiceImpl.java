@@ -42,7 +42,7 @@ public class HotspotServiceImpl implements HotspotService {
      * @return
      */
     @Override
-    public String findHotspot(Location location) throws IOException {
+    public Object findHotspot(Location location) throws IOException {
 
         //location中的部分字段为空
         if (VerifyUtil.locationIsEmpty(location)) {
@@ -63,8 +63,7 @@ public class HotspotServiceImpl implements HotspotService {
             throw new CheckException("网络通讯异常！请重试！");
         }
 
-        List responseList = objectMapper.readValue(reponse,List.class);
-        return objectMapper.writeValueAsString(responseList);
+        return  objectMapper.readValue(reponse,List.class);
 
     }
 }
