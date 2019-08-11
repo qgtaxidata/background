@@ -4,10 +4,7 @@ import org.QGStudio.dtos.ResultBean;
 import org.QGStudio.model.Location;
 import org.QGStudio.service.ThermoDiagramService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 
@@ -20,6 +17,7 @@ import java.text.ParseException;
  */
 @RestController()
 @RequestMapping("/thermoDiagram")
+@CrossOrigin
 public class ThermoDiagramController {
 
     @Autowired
@@ -27,7 +25,17 @@ public class ThermoDiagramController {
 
     @PostMapping("/getMap")
     public ResultBean<?> getMap(@RequestBody Location location) throws ParseException {
+        System.out.println(location);
         return new ResultBean<>(thermoDiagramService.findHeatMap(location));
     }
 
-}
+    @PostMapping("/getHeatMap")
+    public ResultBean<?> getHeatMap(double maxLon, double minLon,double maxLat, double minLat, String time) throws ParseException {
+        return new ResultBean<>(thermoDiagramService.findHeadMap(maxLon, minLon, maxLat, minLat, time));
+    }
+
+    @PostMapping("/getAreaMap")
+    public ResultBean<?> getAreaMap(@RequestParam("area") int area,@RequestParam("time") String time){
+        return new ResultBean<>(thermoDiagramService.findMapNow(area,time));
+    }
+ }

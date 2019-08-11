@@ -1,17 +1,18 @@
 package org.QGStudio.controller;
 
+import ch.hsr.geohash.BoundingBox;
+import ch.hsr.geohash.GeoHash;
+import ch.hsr.geohash.WGS84Point;
+import org.QGStudio.dao.LocationDao;
 import org.QGStudio.dao.TestDao;
 import org.QGStudio.dtos.ResultBean;
-import org.QGStudio.model.Location;
-import org.QGStudio.model.LocationWithHeight;
-import org.QGStudio.model.Point;
-import org.QGStudio.model.User;
+import org.QGStudio.model.*;
 import org.QGStudio.service.TestService;
-import org.QGStudio.util.GeoHashUtil;
+import org.QGStudio.util.GCJ02_WGS84;
+import org.QGStudio.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
@@ -33,6 +34,9 @@ public class TestController {
     private TestService testService;
 
     @Autowired
+    private LocationDao locationDao;
+
+    @Autowired
     private TestDao testDao;
 
     @RequestMapping("/testUser")
@@ -46,5 +50,31 @@ public class TestController {
 
 
         return new ResultBean<>();
+    }
+
+    @RequestMapping("/haha")
+    public ResultBean<?> testSize(){
+        Location location ;
+        WGS84Point wgs84Point = new WGS84Point(23.11416,113.24082);
+        location = (GCJ02_WGS84.wgs84_To_Gcj02(wgs84Point.getLatitude(),wgs84Point.getLongitude()));
+        GeoHash geoHash = GeoHash.withCharacterPrecision(location.getLatitude(),location.getLongitude(),5);
+        BoundingBox boundingBox = geoHash.getBoundingBox();
+        System.out.println("经度差："+(boundingBox.getMaxLon()-boundingBox.getMinLon()));
+        System.out.println("纬度差："+(boundingBox.getMaxLat()-boundingBox.getMinLat()));
+        return  null;
+        }
+
+    @RequestMapping("/testxixi")
+    public ResultBean<?> test(){
+        List<Location> locations = new LinkedList<>();
+        for (String s:
+                AreaLocation.TIANHE_DISTRICT) {
+            GeoHash geoHash = GeoHash.fromGeohashString(s);
+            BoundingBox boundingBox = geoHash.getBoundingBox();
+            Date startTime = TimeUtil.StrToDate("2017-02-04 15:00:00");
+            Date endTime = TimeUtil.StrToDate("2017-02-04 15:00:15");
+            locations.addAll(locationDao.findLocation("gpsdata4",boundingBox.getMaxLon(),boundingBox.getMinLon(),boundingBox.getMaxLat(),boundingBox.getMinLat(),startTime,endTime));
+        }
+        return new ResultBean<>(locations);
     }
 }
