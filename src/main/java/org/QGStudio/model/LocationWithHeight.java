@@ -2,6 +2,8 @@ package org.QGStudio.model;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @ClassName LocationWithHeight
  * @Description
@@ -10,7 +12,7 @@ import lombok.Data;
  * @Version 1.0
  */
 @Data
-public class LocationWithHeight extends Location {
+public class LocationWithHeight extends Location implements Serializable {
 
     // 左边对应的geohash
     String geohash;

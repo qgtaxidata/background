@@ -1,6 +1,7 @@
 package org.QGStudio.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.QGStudio.correspond.HttpClient;
 import org.QGStudio.exception.CheckException;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -31,13 +33,16 @@ public class HotspotServiceImpl implements HotspotService {
     @Autowired
     private ObjectFactory<HttpClient> clientBean;
 
+    // json工具类
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     /**
      * 获取热点推荐的List集合
      * @param location time
      * @return
      */
     @Override
-    public String findHotspot(Location location) throws JsonProcessingException {
+    public Object findHotspot(Location location) throws IOException {
 
         //location中的部分字段为空
         if (VerifyUtil.locationIsEmpty(location)) {
@@ -58,7 +63,7 @@ public class HotspotServiceImpl implements HotspotService {
             throw new CheckException("网络通讯异常！请重试！");
         }
 
-        return reponse;
+        return  objectMapper.readValue(reponse,List.class);
 
     }
 }

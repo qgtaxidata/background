@@ -35,7 +35,7 @@
         <property name="minIdle" value="1" />
         <!-- 等待超时时间-->
         <property name="maxWait" value="1000"/>
-        <property name="filters" value="stat" />
+        <property name="filters" value="stat,log4j2" />
     </bean>
 
     <!-- druid spring监控-->
@@ -63,7 +63,7 @@
         <!-- 队列最大长度，一般需要设置值>=notifyScheduledMainExecutor.maxNum；默认为Integer.MAX_VALUE
             <property name="queueCapacity" value="1000" /> -->
         <!-- 线程池维护线程所允许的空闲时间，默认为60s -->
-        <property name="keepAliveSeconds" value="60" />
+        <property name="keepAliveSeconds" value="3" />
         <!-- 线程池对拒绝任务（无线程可用）的处理策略，目前只支持AbortPolicy、CallerRunsPolicy；默认为后者 -->
         <property name="rejectedExecutionHandler">
             <!-- AbortPolicy:直接抛出java.util.concurrent.RejectedExecutionException异常 -->
@@ -86,6 +86,7 @@
     <!-- DAO接口所在的包-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer" id="mapperScannerConfigurer">
         <property name="basePackage" value="org.QGStudio.dao"/>
+
     </bean>
 
     <!-- 事务管理器-->
@@ -95,10 +96,10 @@
 
     <!-- 事务通知 -->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
-        <tx:attributes>
-            <tx:method name="find*" read-only="true"/>
-            <tx:method name="*" isolation="DEFAULT"/>
-        </tx:attributes>
+<!--        <tx:attributes>-->
+<!--            <tx:method name="find*" read-only="true"/>-->
+<!--            <tx:method name="*" isolation="DEFAULT"/>-->
+<!--        </tx:attributes>-->
     </tx:advice>
     <!-- AOP增强-->
     <aop:config>

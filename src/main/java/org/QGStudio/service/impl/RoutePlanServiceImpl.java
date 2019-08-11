@@ -92,7 +92,6 @@ public class RoutePlanServiceImpl implements RoutePlanService {
 
         log.info("获取到数据挖掘组的响应,长度为：{}",response.length());
 
-
         return response;
 
     }

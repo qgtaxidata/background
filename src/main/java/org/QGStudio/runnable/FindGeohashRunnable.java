@@ -1,7 +1,7 @@
 package org.QGStudio.runnable;
 
 import ch.hsr.geohash.BoundingBox;
-import lombok.extern.log4j.Log4j2;
+import ch.hsr.geohash.GeoHash;
 import org.QGStudio.dao.LocationDao;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -15,32 +15,32 @@ import java.util.concurrent.CountDownLatch;
  * @description
  * @date 2019-08-09 15:33
  */
-@Log4j2
 public class FindGeohashRunnable implements Runnable {
 
     /**
      * 操作的表名
      */
-    protected String table;
+    private String table;
     /**
      * 起始时间
      */
-    protected Date startTime;
+    private Date startTime;
     /**
      * 结束时间
      */
-    protected Date endTime;
+    private Date endTime;
 
-    protected BoundingBox boundingBox;
+    private BoundingBox boundingBox;
     /**
      * 容器
      */
-    protected List list;
-    protected LocationDao locationDao;
-    protected CountDownLatch countDownLatch;
+    private List list;
+    private LocationDao locationDao;
+    private CountDownLatch countDownLatch;
 
     public FindGeohashRunnable(String table, Date startTime,
-                               Date endTime, BoundingBox boundingBox, List list, CountDownLatch countDownLatch) {
+                               Date endTime, BoundingBox boundingBox, List list,
+                               CountDownLatch countDownLatch) {
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
 
         this.table = table;
@@ -63,11 +63,8 @@ public class FindGeohashRunnable implements Runnable {
      */
     @Override
     public void run() {
-        log.info(new Date().toLocaleString()+"开始SQL查询");
-                list.addAll(locationDao.findLocation(table, boundingBox.getMaxLon(), boundingBox.getMinLon(),
-                boundingBox.getMaxLat(), boundingBox.getMinLat(), startTime, endTime));
+        list.addAll(locationDao.findLocation(table,boundingBox.getMaxLon(),boundingBox.getMinLon(),
+                boundingBox.getMaxLat(),boundingBox.getMinLat(),startTime,endTime));
         countDownLatch.countDown();
-        log.info(new Date().toLocaleString()+"结束SQL查询");
-
     }
 }
