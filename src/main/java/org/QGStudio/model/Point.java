@@ -1,17 +1,21 @@
 package org.QGStudio.model;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * @ClassName Point
- * @Description TODO
+ * @Description
  * @Author huange7
  * @Date 2019-08-08 22:13
  * @Version 1.0
  */
 @Data
-public class Point {
+@Accessors(chain = true)
+public class Point implements Serializable {
     Double lng;
-    Double  lat;
+    Double lat;
     int count;
 }

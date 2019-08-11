@@ -11,6 +11,7 @@ import java.util.Date;
  * @Version 1.0
  */
 public class TableUtil {
+
     public static String getTable(Date date){
         return "gpsdata"+date.getDate();
     }

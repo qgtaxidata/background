@@ -9,27 +9,26 @@ public class GCJ02_WGS84 {
     public static double a = 6378245.0;
     public static double ee = 0.00669342162296594323;
 
-    public static LocationWithHeight wgs84_To_Gcj02(double lat, double lon) {
-        LocationWithHeight info = new LocationWithHeight();
-        if (outOfChina(lat, lon)) {
-            info.setLatitude(lat);
-            info.setLongitude(lon);
-            }else {
-            double dLat = transformLat(lon - 105.0, lat - 35.0);
-            double dLon = transformLon(lon - 105.0, lat - 35.0);
-            double radLat = lat / 180.0 * pi;
-            double magic = Math.sin(radLat);
-            magic = 1 - ee * magic * magic;
-            double sqrtMagic = Math.sqrt(magic);
-            dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * pi);
-            dLon = (dLon * 180.0) / (a / sqrtMagic * Math.cos(radLat) * pi);
-            double mgLat = lat + dLat;
-            double mgLon = lon + dLon;
-            info.setLatitude(mgLat);
-            info.setLongitude(mgLon);
-        }
-        return info;
-        }
+
+    public static void wgs84_To_Gcj02(Location location) {
+
+
+        double lon = location.getLongitude();
+        double lat = location.getLatitude();
+        double dLat = transformLat(lon - 105.0, lat - 35.0);
+        double dLon = transformLon(lon - 105.0, lat - 35.0);
+        double radLat = lat / 180.0 * pi;
+        double magic = Math.sin(radLat);
+        magic = 1 - ee * magic * magic;
+        double sqrtMagic = Math.sqrt(magic);
+        dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * pi);
+        dLon = (dLon * 180.0) / (a / sqrtMagic * Math.cos(radLat) * pi);
+        double mgLat = lat + dLat;
+        double mgLon = lon + dLon;
+        location.setLatitude(mgLat);
+        location.setLongitude(mgLon);
+
+    }
 
     private static boolean outOfChina(double lat, double lon) {
         if (lon < 72.004 || lon > 137.8347)

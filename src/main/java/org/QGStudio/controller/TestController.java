@@ -49,17 +49,4 @@ public class TestController {
         return new ResultBean<>();
     }
 
-    @RequestMapping("/test1")
-    public ResultBean<?> testGet(){
-
-
-        List<Location> huangyuqisb = testDao.findHUANGYUQISB();
-        List<LocationWithHeight> list = new ArrayList<>();
-        for (Location location:
-            huangyuqisb ) {
-            LocationWithHeight locationWithHeight = GCJ02_WGS84.wgs84_To_Gcj02(location.getLatitude(), location.getLongitude());
-            list.add(locationWithHeight);
-        }
-        return new ResultBean<>(list);
-    }
 }

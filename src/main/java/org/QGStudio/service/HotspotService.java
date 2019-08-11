@@ -10,6 +10,6 @@ import java.util.List;
 @Service
 public interface HotspotService {
 
-    String findHotspot(Location location) throws IOException;
+    Object findHotspot(Location location) throws IOException;
 
 }

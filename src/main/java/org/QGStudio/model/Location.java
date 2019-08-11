@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * @ClassName Location
- * @Description TODO
+ * @Description
  * @Author huange7
  * @Date 2019-08-08 21:07
  * @Version 1.0
@@ -16,7 +19,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Location {
+@Accessors(chain = true)
+public class Location implements Serializable {
 
     // 经度
     private Double longitude;
