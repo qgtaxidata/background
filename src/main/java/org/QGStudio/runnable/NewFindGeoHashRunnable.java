@@ -3,6 +3,8 @@ package org.QGStudio.runnable;
 import ch.hsr.geohash.BoundingBox;
 import ch.hsr.geohash.GeoHash;
 import lombok.extern.log4j.Log4j2;
+import org.QGStudio.dao.LocationDao;
+import org.QGStudio.model.Location;
 import org.QGStudio.model.LocationWithHeight;
 
 import java.util.Date;
@@ -22,6 +24,7 @@ public class NewFindGeoHashRunnable extends FindGeohashRunnable{
 
     Object[] geohashs;
 
+    LocationDao locationDao;
 
     public NewFindGeoHashRunnable(String table, Date startTime, Date endTime,Object[] geoHashs, List list, CountDownLatch countDownLatch) {
         super(table, startTime, endTime, null, list, countDownLatch);

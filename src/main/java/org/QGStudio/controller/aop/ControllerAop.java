@@ -7,6 +7,8 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
+
 /**
  * @Description : 异常统一处理器
  * @Param :
@@ -29,7 +31,7 @@ public class ControllerAop {
             result = (ResultBean<?>) pjp.proceed();
 
         } catch (Throwable e) {
-            e.printStackTrace();
+
             result = handlerException(pjp, e);
         }
 
@@ -41,12 +43,16 @@ public class ControllerAop {
 
         // 已知异常
         if (e instanceof CheckException) {
-            e.printStackTrace();
+
             result.setMsg(e.getLocalizedMessage());
             result.setCode(ResultBean.FAIL);
-        } else if (e instanceof NullPointerException){
-            e.printStackTrace();
+        } else if (e instanceof NullPointerException) {
+
             result.setMsg("错误!参数不匹配");
+            result.setCode(ResultBean.FAIL);
+        } else if (e instanceof ParseException) {
+
+            result.setMsg("请输入正确的时间!");
             result.setCode(ResultBean.FAIL);
         } else {
             // 未知异常

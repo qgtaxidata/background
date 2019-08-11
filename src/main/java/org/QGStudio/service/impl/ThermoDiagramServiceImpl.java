@@ -130,8 +130,7 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
         List<Point> points = new LinkedList<>();
         for (String k : keys) {
             Point point = new Point();
-            point.setLat(GeoHashUtil.geohash2Location(k).getLatitude());
-            point.setLng(GeoHashUtil.geohash2Location(k).getLongitude());
+            GCJ02_WGS84.wgs84_To_Gcj02(point);
             point.setCount(map.get(k));
             points.add(point);
         }
