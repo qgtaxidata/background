@@ -25,10 +25,9 @@ public class RoutePlanController {
     private RoutePlanService routePlanService;
 
     @PostMapping("/findAll")
-    public ResultBean<?> findAllRoute(@RequestBody Location start,@RequestBody Location end){
-        System.out.println(start);
-        System.out.println(end);
-        return null;
+    public ResultBean<?> findAllRoute(@RequestBody Location start,@RequestBody Location end) throws JsonProcessingException {
+        return new ResultBean<>(routePlanService.findAllRoutes(start.getLongitude(),start.getLatitude(),
+                end.getLongitude(),end.getLatitude()));
     }
 
     /**
