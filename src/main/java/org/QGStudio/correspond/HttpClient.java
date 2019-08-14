@@ -37,8 +37,6 @@ public class HttpClient {
     private ObjectMapper objectMapper = new ObjectMapper();
     // 创建HttpClient客户端
     private CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-
-
     /**
      * @Description : 发送带参数的post方法
      * @Param : [t]
@@ -46,10 +44,10 @@ public class HttpClient {
      * @Author : SheldonPeng
      * @Date : 2019-08-08
      */
-    public String doPostWithParam(Object object) throws JsonProcessingException {
+    public String doPostWithParam(Object object , String url) throws JsonProcessingException {
 
         // 建立post请求
-        HttpPost httpPost = new HttpPost("http://192.168.1.108:8080/taxi/api/v1.0/hotspot");
+        HttpPost httpPost = new HttpPost(url);
         // 转换成json对象
         StringEntity entity = new StringEntity(objectMapper.writeValueAsString(object), "UTF-8");
         // 加入post请求中

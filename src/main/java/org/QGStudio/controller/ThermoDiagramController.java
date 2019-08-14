@@ -6,6 +6,7 @@ import org.QGStudio.service.ThermoDiagramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.text.ParseException;
 
 /**
@@ -38,4 +39,12 @@ public class ThermoDiagramController {
     public ResultBean<?> getAreaMap(@RequestParam("area") int area,@RequestParam("time") String time){
         return new ResultBean<>(thermoDiagramService.findMapNow(area,time));
     }
+
+    @PostMapping("/getFutureMap")
+    public ResultBean<?> getFutureMap(@RequestParam("nowTime") String nowTime,@RequestParam("futureTime") String futureTime,@RequestParam("area") int area,
+                                      @RequestParam("algorithm") int algorithm) throws IOException {
+
+        return new ResultBean<>(thermoDiagramService.findFutureMap(nowTime,futureTime,area,algorithm));
+    }
+
  }

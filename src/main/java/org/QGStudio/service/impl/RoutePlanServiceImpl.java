@@ -50,7 +50,8 @@ public class RoutePlanServiceImpl implements RoutePlanService {
         if (VerifyUtil.isEmpty(routeId)) {
             throw new CheckException("路线id不能为空！");
         }
-        String response = clientBean.getObject().doPostWithParam(new Object[]{time, routeId});
+        // todo 未完成
+        String response = clientBean.getObject().doPostWithParam(new Object[]{time, routeId},"http://192.168.1.101:8080");
         if (VerifyUtil.isEmpty(response)) {
             throw new CheckException("网络通讯异常！请重试！");
         }
@@ -84,7 +85,8 @@ public class RoutePlanServiceImpl implements RoutePlanService {
         start = DigitUtil.checkLocationDigit(start);
         end = DigitUtil.checkLocationDigit(end);
 
-        String response = clientBean.getObject().doPostWithParam(new Object[]{start,end});
+        // todo 未确定
+        String response = clientBean.getObject().doPostWithParam(new Object[]{start,end},"http://192.168.1.101:8080");
 
         if (VerifyUtil.isEmpty(response)) {
             throw new CheckException("网络通讯异常！请重试！");
