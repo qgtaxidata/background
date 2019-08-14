@@ -23,7 +23,7 @@ public interface TaxiRouteService {
      * @Author : SheldonPeng
      * @Date : 2019-08-10
      */
-    List findTaxi(Location location) throws ParseException;
+    List findTaxi(String time , int area) throws ParseException;
 
 
     /**
@@ -34,5 +34,8 @@ public interface TaxiRouteService {
      * @Date : 2019-08-10
      */
     List<TaxiLocation> findRoute(TaxiLocation taxiLocation) throws ParseException;
+
+
+    List<TaxiLocation> findLiveRoute( TaxiLocation taxiLocation) throws ParseException;
 
 }

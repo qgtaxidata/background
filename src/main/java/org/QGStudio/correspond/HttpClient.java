@@ -49,7 +49,7 @@ public class HttpClient {
     public String doPostWithParam(Object object) throws JsonProcessingException {
 
         // 建立post请求
-        HttpPost httpPost = new HttpPost("http://192.168.31.89:8080/taxi/api/v1.0/hotspot");
+        HttpPost httpPost = new HttpPost("http://192.168.1.108:8080/taxi/api/v1.0/hotspot");
         // 转换成json对象
         StringEntity entity = new StringEntity(objectMapper.writeValueAsString(object), "UTF-8");
         // 加入post请求中
