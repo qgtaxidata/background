@@ -21,7 +21,7 @@
     </context:component-scan>
 
     <!-- druid连接池配置-->
-    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+    <bean id="readDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
         <property name="url" value="jdbc:mysql://10.21.48.11:3306/taxilog"/>
@@ -81,7 +81,7 @@
 
     <!-- sqlSession 工厂-->
     <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sessionFactory">
-        <property name="dataSource" ref="dataSource"/>
+        <property name="dataSource" ref="readDataSource"/>
     </bean>
     <!-- DAO接口所在的包-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer" id="mapperScannerConfigurer">
@@ -90,7 +90,7 @@
 
     <!-- 事务管理器-->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
+        <property name="dataSource" ref="readDataSource"/>
     </bean>
 
     <!-- 事务通知 -->

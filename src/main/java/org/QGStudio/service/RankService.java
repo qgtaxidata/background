@@ -8,4 +8,6 @@ public interface RankService {
 
     String getRank(int area, String date) throws JsonProcessingException;
 
+    String getSituation(int area,String date,String driverID) throws JsonProcessingException;
+
 }
