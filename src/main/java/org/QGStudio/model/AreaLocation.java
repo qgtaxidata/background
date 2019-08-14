@@ -70,52 +70,52 @@ public class AreaLocation {
             "ws0v7", "ws0u2", "ws0yj", "ws1j0", "ws0ub", "ws0ue", "ws0u0", "ws0um", "ws0uf"};
 
     // 广州市经纬度边界
-    public static final Location MAX_GUANGZHOU = new Location().setLongitude(114.059957).setLatitude(23.932988);
-    public static final Location MIN_GUANGZHOU = new Location().setLongitude(112.958507).setLatitude(22.51436);
+    public static final Location MAX_GUANGZHOU = new Location().setLongitude(114.05474775).setLatitude(23.93551101);
+    public static final Location MIN_GUANGZHOU = new Location().setLongitude(112.95341466).setLatitude(22.51735197);
 
     // 花都区经纬度边界
-    public static final Location MAX_HUADU = new Location().setLongitude(113.475969).setLatitude(23.615999);
-    public static final Location MIN_HUADU = new Location().setLongitude(112.958507).setLatitude(23.248785);
+    public static final Location MAX_HUADU = new Location().setLongitude(113.47054624).setLatitude(23.61852136);
+    public static final Location MIN_HUADU = new Location().setLongitude(112.95336713).setLatitude(23.25154012);
 
     // 南沙区经纬度边界
-    public static final Location MAX_NANSHA = new Location().setLongitude(113.740462).setLatitude(22.908406);
-    public static final Location MIN_NANSHA = new Location().setLongitude(113.296142).setLatitude(22.51436);
+    public static final Location MAX_NANSHA = new Location().setLongitude(113.73527165).setLatitude(22.91117829);
+    public static final Location MIN_NANSHA = new Location().setLongitude(113.29081476).setLatitude(22.51719596);
 
     // 增城区经纬度边界
-    public static final Location MAX_ZENGCHENG = new Location().setLongitude(114.001529).setLatitude(23.619882);
-    public static final Location MIN_ZENGCHENG = new Location().setLongitude(113.54777).setLatitude(23.084203);
+    public static final Location MAX_ZENGCHENG = new Location().setLongitude(113.99645982).setLatitude(23.62246673);
+    public static final Location MIN_ZENGCHENG = new Location().setLongitude(113.54261963).setLatitude(23.08702985);
 
     // 从化区经纬度边界
-    public static final Location MAX_CONGHUA = new Location().setLongitude(114.059957).setLatitude(23.932988);
-    public static final Location MIN_CONGHUA = new Location().setLongitude(113.281547).setLatitude(23.367777);
+    public static final Location MAX_CONGHUA = new Location().setLongitude(114.05474775).setLatitude(23.93551101);
+    public static final Location MIN_CONGHUA = new Location().setLongitude(113.27618446).setLatitude(23.37036426);
 
     // 番禺区经纬度边界
-    public static final Location MAX_PANYU = new Location().setLongitude(113.5751).setLatitude(23.080219);
-    public static final Location MIN_PANYU = new Location().setLongitude(113.249463).setLatitude(22.856961);
+    public static final Location MAX_PANYU = new Location().setLongitude(113.57000643).setLatitude(23.08309105);
+    public static final Location MIN_PANYU = new Location().setLongitude(113.24415718).setLatitude(22.85975588);
 
     // 白云区经纬度边界
-    public static final Location MAX_BAIYUN = new Location().setLongitude(113.510165).setLatitude(23.428664);
-    public static final Location MIN_BAIYUN = new Location().setLongitude(113.149979).setLatitude(23.138044);
+    public static final Location MAX_BAIYUN = new Location().setLongitude(113.50487316).setLatitude(23.43128852);
+    public static final Location MIN_BAIYUN = new Location().setLongitude(113.14452439).setLatitude(23.14058723);
 
     // 黄浦区经纬度边界
-    public static final Location MAX_HUANGPU = new Location().setLongitude(113.607677).setLatitude(23.412168);
-    public static final Location MIN_HUANGPU = new Location().setLongitude(113.398068).setLatitude(23.030213);
+    public static final Location MAX_HUANGPU = new Location().setLongitude(113.60258444).setLatitude(23.41494668);
+    public static final Location MIN_HUANGPU = new Location().setLongitude(113.39254983).setLatitude(23.03274906);
 
     // 荔湾区经纬度边界
-    public static final Location MAX_LIWAN = new Location().setLongitude(113.276887).setLatitude(23.159613);
-    public static final Location MIN_LIWAN = new Location().setLongitude(113.17712).setLatitude(23.041862);
+    public static final Location MAX_LIWAN = new Location().setLongitude(113.27154412).setLatitude(23.16226802);
+    public static final Location MIN_LIWAN = new Location().setLongitude(113.17172095).setLatitude(23.04449532);
 
     // 海珠区经纬度边界
-    public static final Location MAX_HAIZHU = new Location().setLongitude(113.419714).setLatitude(23.11372);
-    public static final Location MIN_HAIZHU = new Location().setLongitude(113.242077).setLatitude(23.043635);
+    public static final Location MAX_HAIZHU = new Location().setLongitude(113.41419971).setLatitude(23.11622725);
+    public static final Location MIN_HAIZHU = new Location().setLongitude(113.23675826).setLatitude(23.04635029);
 
     // 天河区经纬度边界
-    public static final Location MAX_TIANHE = new Location().setLongitude(113.448038).setLatitude(23.245878);
-    public static final Location MIN_TIANHE = new Location().setLongitude(113.300979).setLatitude(23.098121);
+    public static final Location MAX_TIANHE = new Location().setLongitude(113.44256194).setLatitude(23.24837581);
+    public static final Location MIN_TIANHE = new Location().setLongitude(113.29560448).setLatitude(23.10076866);
 
     // 越秀区经纬度边界
-    public static final Location MAX_YUEXIU = new Location().setLongitude(113.323058).setLatitude(23.168854);
-    public static final Location MIN_YUEXIU = new Location().setLongitude(113.240459).setLatitude(23.105325);
+    public static final Location MAX_YUEXIU = new Location().setLongitude(113.31763552).setLatitude(23.17143379);
+    public static final Location MIN_YUEXIU = new Location().setLongitude(113.23513573).setLatitude(23.10801373);
 
     public static final Map<Integer, String[]> AREA_MAP = new HashMap<>();
     public static final Map<Integer, Location> MAX_MAP = new HashMap<>();

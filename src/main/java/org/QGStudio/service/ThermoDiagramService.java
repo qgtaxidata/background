@@ -1,7 +1,10 @@
 package org.QGStudio.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.QGStudio.model.Location;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -49,4 +52,13 @@ public interface ThermoDiagramService {
      * @date : 2019-08-11 7:49
      */
     List findMapNow(int area,String time);
+
+    /**
+     * @title : 获取未来热力图
+     * @param :[nowTime, futureTime, area,algorithm]
+     * @return : java.util.List
+     * @author : huange7
+     * @date : 2019-08-12 16:58
+     */
+    Object findFutureMap(String nowTime , String futureTime, int area, int algorithm) throws IOException;
 }

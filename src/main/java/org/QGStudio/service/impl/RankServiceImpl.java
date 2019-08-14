@@ -30,7 +30,7 @@ public class RankServiceImpl implements RankService {
         if (VerifyUtil.isEmpty(date)) {
             throw new CheckException("时间字段不能为空");
         }
-        String response = clientBean.getObject().doPostWithParam(new Object[]{area,date});
+        String response = clientBean.getObject().doPostWithParam(new Object[]{area,date},"http://192.168.1.101:8080/taxi/api/v1.0/IncomeRank");
 
         if (VerifyUtil.isEmpty(response)) {
             throw new CheckException("网络通讯异常！请重试！");
