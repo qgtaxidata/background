@@ -29,16 +29,21 @@ public class TaxiRouteController {
     @Autowired
     private TaxiRouteService taxiRouteService;
 
-    @PostMapping("/findTaxi")
-    public ResultBean<?> findTaxi(@RequestBody Location location) throws ParseException {
+    @GetMapping("/findTaxi")
+    public ResultBean<?> findTaxi(@RequestParam("time") String time, @RequestParam("area") int area) throws ParseException {
 
-        return new ResultBean<>(taxiRouteService.findTaxi(location));
+        return new ResultBean<>(taxiRouteService.findTaxi(time,area));
     }
-
     @PostMapping("/findRoute")
     public ResultBean<?> findRoute(@RequestBody TaxiLocation taxiLocation) throws ParseException {
 
         log.info(taxiLocation);
         return new ResultBean<>(taxiRouteService.findRoute(taxiLocation));
+    }
+
+    @PostMapping("/findLiveRoute")
+    public ResultBean<?> findLiveRoute(@RequestBody TaxiLocation taxiLocation) throws ParseException {
+
+        return new ResultBean<>(taxiRouteService.findLiveRoute(taxiLocation));
     }
 }
