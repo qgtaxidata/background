@@ -58,6 +58,13 @@ public class RoutePlanServiceImpl implements RoutePlanService {
         return response;
     }
 
+    @Override
+    public String getRoute(Float lonOrigin, Float lanOrigin, Float lonDestination, Float lanDestination) {
+
+        return null;
+
+    }
+
     /**
      * @title : 查询所有的路径
      * @param :[startLng, startLat, endLng, endLat]

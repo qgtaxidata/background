@@ -24,6 +24,14 @@ public interface RoutePlanService {
      */
     String findSingleRoute(String time, int routeId) throws JsonProcessingException;
 
-
+    /**
+     * 获取路线
+     * @param lonOrigin
+     * @param lanOrigin
+     * @param lonDestination
+     * @param lanDestination
+     * @return
+     */
+    String getRoute(Float lonOrigin, Float lanOrigin, Float lonDestination, Float lanDestination);
 
 }
