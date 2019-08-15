@@ -41,6 +41,12 @@ public class RoutePlanController {
         return new ResultBean<>(routePlanService.findSingleRoute(time, routeId));
     }
 
+    @GetMapping("/getRoute")
+    public ResultBean<?> getRoute(@RequestParam Float lonOrigin, @RequestParam Float lanOrigin,
+                                  @RequestParam Float lonDestination, @RequestParam Float lanDestination) {
+        return new ResultBean<>(routePlanService.getRoute(lonOrigin, lanOrigin, lonDestination, lanDestination));
+    }
+
 
 
 }
