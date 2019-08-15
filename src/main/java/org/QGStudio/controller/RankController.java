@@ -26,6 +26,7 @@ public class RankController {
 
     @RequestMapping("/getRank")
     public ResultBean<?> getRank(@RequestParam int area, @RequestParam String date) throws JsonProcessingException {
+        log.info("连接进来");
         return new ResultBean<>(rankService.getRank(area, date));
     }
 
