@@ -41,10 +41,10 @@ public class RoutePlanController {
         return new ResultBean<>(routePlanService.findSingleRoute(time, routeId));
     }
 
-    @GetMapping("/getRoute")
-    public ResultBean<?> getRoute(@RequestParam Float lonOrigin, @RequestParam Float lanOrigin,
-                                  @RequestParam Float lonDestination, @RequestParam Float lanDestination) throws JsonProcessingException {
-        return new ResultBean<>(routePlanService.getRoute(lonOrigin, lanOrigin, lonDestination, lanDestination));
+    @RequestMapping("/getRoute")
+    public ResultBean<?> getRoute(@RequestParam("lonOrigin") Float lonOrigin, @RequestParam("latOrigin") Float latOrigin,
+                                  @RequestParam("lonDestination") Float lonDestination, @RequestParam("latDestination") Float latDestination) throws JsonProcessingException {
+        return new ResultBean<>(routePlanService.getRoute(lonOrigin, latOrigin, lonDestination, latDestination));
     }
 
 
