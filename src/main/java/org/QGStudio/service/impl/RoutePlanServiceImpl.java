@@ -1,6 +1,7 @@
 package org.QGStudio.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.QGStudio.correspond.HttpClient;
 import org.QGStudio.exception.CheckException;
@@ -13,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName RoutePlanServiceImpl
@@ -28,6 +32,8 @@ public class RoutePlanServiceImpl implements RoutePlanService {
 
     @Autowired
     private ObjectFactory<HttpClient> clientBean;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * 查询单条路线
@@ -51,12 +57,57 @@ public class RoutePlanServiceImpl implements RoutePlanService {
             throw new CheckException("路线id不能为空！");
         }
         // todo 未完成
-        String response = clientBean.getObject().doPostWithParam(new Object[]{time, routeId},"http://192.168.1.101:8080");
+        String response = clientBean.getObject().doPostWithParam(new Object[]{time, routeId},"http://192.168.1.100:8080");
         if (VerifyUtil.isEmpty(response)) {
             throw new CheckException("网络通讯异常！请重试！");
         }
         log.info("获取到数据挖掘组的响应,长度为：{}",response.length());
         return response;
+    }
+
+    @Override
+    public Object getRoute(Float lonOrigin, Float latOrigin, Float lonDestination, Float latDestination) throws JsonProcessingException {
+
+        log.info("前端请求信息："+"lonOrigin = "+latOrigin+" lanOrigin = "+latOrigin+" lonDestination = "+lonDestination
+
+        + "lanDestination = " + latDestination);
+
+        if (VerifyUtil.isNull(lonOrigin)) {
+            throw new CheckException("起点的经度不能为空");
+        }
+        if (VerifyUtil.isNull(latOrigin)) {
+            throw new CheckException("起点的纬度不能为空");
+        }
+        if (VerifyUtil.isNull(lonDestination)) {
+            throw new CheckException("终点的经度不能为空");
+        }
+        if (VerifyUtil.isNull(latDestination)) {
+            throw new CheckException("终点的纬度不能为空");
+        }
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("lon_origin",lonOrigin);
+        map.put("lat_origin",latOrigin);
+        map.put("lon_destination",lonDestination);
+        map.put("lat_destination",latDestination);
+
+        String response = clientBean.getObject().doPostWithParam(map, "http://192.168.1.100:8080/taxi/api/v1.0/GetRoute");
+
+        log.info("树蛙响应信息："+response);
+
+        if (VerifyUtil.isEmpty(response)) {
+            throw new CheckException("网络通讯异常！请重试！");
+        }
+
+        Object object = null;
+        try {
+            object = objectMapper.readValue(response,Object.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return object;
+
     }
 
     /**

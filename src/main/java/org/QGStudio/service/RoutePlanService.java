@@ -2,6 +2,7 @@ package org.QGStudio.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import java.io.ObjectOutputStream;
 
 
 /**
@@ -24,6 +25,14 @@ public interface RoutePlanService {
      */
     String findSingleRoute(String time, int routeId) throws JsonProcessingException;
 
-
+    /**
+     * 获取路线
+     * @param lonOrigin
+     * @param latOrigin
+     * @param lonDestination
+     * @param latDestination
+     * @return
+     */
+    Object getRoute(Float lonOrigin, Float latOrigin, Float lonDestination, Float latDestination) throws JsonProcessingException;
 
 }
