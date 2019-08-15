@@ -43,7 +43,7 @@ public class RoutePlanController {
 
     @GetMapping("/getRoute")
     public ResultBean<?> getRoute(@RequestParam Float lonOrigin, @RequestParam Float lanOrigin,
-                                  @RequestParam Float lonDestination, @RequestParam Float lanDestination) {
+                                  @RequestParam Float lonDestination, @RequestParam Float lanDestination) throws JsonProcessingException {
         return new ResultBean<>(routePlanService.getRoute(lonOrigin, lanOrigin, lonDestination, lanDestination));
     }
 

@@ -1,6 +1,7 @@
 package org.QGStudio.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.QGStudio.correspond.HttpClient;
 import org.QGStudio.exception.CheckException;
@@ -13,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName RoutePlanServiceImpl
@@ -28,6 +32,8 @@ public class RoutePlanServiceImpl implements RoutePlanService {
 
     @Autowired
     private ObjectFactory<HttpClient> clientBean;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * 查询单条路线
@@ -60,9 +66,47 @@ public class RoutePlanServiceImpl implements RoutePlanService {
     }
 
     @Override
-    public String getRoute(Float lonOrigin, Float lanOrigin, Float lonDestination, Float lanDestination) {
+    public Object getRoute(Float lonOrigin, Float lanOrigin, Float lonDestination, Float lanDestination) throws JsonProcessingException {
 
-        return null;
+        log.info("前端请求信息："+"lonOrigin = "+lanOrigin+" lanOrigin = "+lanOrigin+" lonDestination = "+lonDestination
+
+        + "lanDestination = " + lanDestination);
+
+        if (VerifyUtil.isNull(lonOrigin)) {
+            throw new CheckException("起点的经度不能为空");
+        }
+        if (VerifyUtil.isNull(lanOrigin)) {
+            throw new CheckException("起点的纬度不能为空");
+        }
+        if (VerifyUtil.isNull(lonDestination)) {
+            throw new CheckException("终点的经度不能为空");
+        }
+        if (VerifyUtil.isNull(lanDestination)) {
+            throw new CheckException("终点的纬度不能为空");
+        }
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("lon_origin",lonOrigin);
+        map.put("lan_origin",lanOrigin);
+        map.put("lon_destination",lonDestination);
+        map.put("lan_destination",lanDestination);
+
+        String response = clientBean.getObject().doPostWithParam(map, "");
+
+        log.info("树蛙响应信息："+response);
+
+        if (VerifyUtil.isEmpty(response)) {
+            throw new CheckException("网络通讯异常！请重试！");
+        }
+
+        Object object = null;
+        try {
+            object = objectMapper.readValue(response,Object.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return object;
 
     }
 
