@@ -50,6 +50,7 @@ public class NewFindGeoHashRunnable extends FindGeohashRunnable{
             log.info("共用时,{}",end-start);
         }
         list.addAll(myList);
+        myList.clear();
         countDownLatch.countDown();
     }
 }

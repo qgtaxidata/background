@@ -70,12 +70,17 @@ public class RouteRunnable implements Runnable{
         long end = System.currentTimeMillis();
         log.info("查询数据库完成，共用时{}",end - start);
 
+        start = System.currentTimeMillis();
+        log.info("开始处理数据,现在为:{}",start);
         for (TaxiLocation taxi :
                 taxiLocations) {
             if ( licenseplateno.equals(taxi.getLicenseplateno())){
                 resultList.add(taxi);
             }
         }
+        end = System.currentTimeMillis();
+        log.info("数据处理完毕，用时:{}",end - start);
+        taxiLocations.clear();
         countDownLatch.countDown();
     }
 }
