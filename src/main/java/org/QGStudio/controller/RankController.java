@@ -30,4 +30,9 @@ public class RankController {
         return new ResultBean<>(rankService.getRank(area, date));
     }
 
+    @RequestMapping("/getSituation")
+    public ResultBean<?> getSituation(@RequestParam int area, @RequestParam String date,@RequestParam("driverID") String driverID) throws JsonProcessingException {
+        return new ResultBean<>(rankService.getSituation(area, date,driverID));
+    }
+
 }
