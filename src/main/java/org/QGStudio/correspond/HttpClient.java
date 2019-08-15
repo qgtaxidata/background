@@ -50,6 +50,7 @@ public class HttpClient {
         HttpPost httpPost = new HttpPost(url);
         // 转换成json对象
         StringEntity entity = new StringEntity(objectMapper.writeValueAsString(object), "UTF-8");
+        log.info("请求内容: "+entity);
         // 加入post请求中
         httpPost.setEntity(entity);
         // 设置请求头
