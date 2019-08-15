@@ -27,12 +27,17 @@ public interface RouteDao {
      * @Author : SheldonPeng
      * @Date : 2019-08-10
      */
-    @Select("select distinct LICENSEPLATENO,GPS_TIME from ${table} where GPS_Time between #{startTime} and #{endTime} AND GEOHASH LIKE #{geoHash} LIMIT 3")
+    @Select("select distinct LICENSEPLATENO,GPS_TIME from ${table} where GPS_Time between #{startTime} and #{endTime} " +
+            "AND LONGITUDE between #{minLon} and #{maxLon} AND LATITUDE between #{minLat} and " +
+            "#{maxLat} limit 20")
     @Results(id = "TaxiMap",value = {
-            @Result(column = "GPS_Time",property = "time")
+            @Result(column = "GPS_Time",property = "time"),
+            @Result(column = "LICENSEPLATENO" , property = "licenseplateno")
     })
-    List<TaxiLocation> findTaxi(@Param("table") String table, @Param("geoHash") String geoHash, @Param("startTime")Date startTime,
-                                @Param("endTime") Date endTime);
+    List<TaxiLocation> findTaxi(@Param("table") String table, @Param("startTime")Date startTime,
+                                @Param("endTime") Date endTime , @Param("maxLon") Double maxLon ,
+                                @Param("minLon") Double minLon,@Param("maxLat") Double maxLat,
+                                @Param("minLat") Double minLat);
 
     /**
      * @Description : 根据车牌号，寻找一段时间此车的经纬度集合
