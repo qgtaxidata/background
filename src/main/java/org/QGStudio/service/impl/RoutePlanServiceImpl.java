@@ -57,7 +57,7 @@ public class RoutePlanServiceImpl implements RoutePlanService {
             throw new CheckException("路线id不能为空！");
         }
         // todo 未完成
-        String response = clientBean.getObject().doPostWithParam(new Object[]{time, routeId},"http://192.168.1.101:8080");
+        String response = clientBean.getObject().doPostWithParam(new Object[]{time, routeId},"http://192.168.1.100:8080");
         if (VerifyUtil.isEmpty(response)) {
             throw new CheckException("网络通讯异常！请重试！");
         }
@@ -66,32 +66,32 @@ public class RoutePlanServiceImpl implements RoutePlanService {
     }
 
     @Override
-    public Object getRoute(Float lonOrigin, Float lanOrigin, Float lonDestination, Float lanDestination) throws JsonProcessingException {
+    public Object getRoute(Float lonOrigin, Float latOrigin, Float lonDestination, Float latDestination) throws JsonProcessingException {
 
-        log.info("前端请求信息："+"lonOrigin = "+lanOrigin+" lanOrigin = "+lanOrigin+" lonDestination = "+lonDestination
+        log.info("前端请求信息："+"lonOrigin = "+latOrigin+" lanOrigin = "+latOrigin+" lonDestination = "+lonDestination
 
-        + "lanDestination = " + lanDestination);
+        + "lanDestination = " + latDestination);
 
         if (VerifyUtil.isNull(lonOrigin)) {
             throw new CheckException("起点的经度不能为空");
         }
-        if (VerifyUtil.isNull(lanOrigin)) {
+        if (VerifyUtil.isNull(latOrigin)) {
             throw new CheckException("起点的纬度不能为空");
         }
         if (VerifyUtil.isNull(lonDestination)) {
             throw new CheckException("终点的经度不能为空");
         }
-        if (VerifyUtil.isNull(lanDestination)) {
+        if (VerifyUtil.isNull(latDestination)) {
             throw new CheckException("终点的纬度不能为空");
         }
 
         Map<String,Object> map = new HashMap<>();
         map.put("lon_origin",lonOrigin);
-        map.put("lan_origin",lanOrigin);
+        map.put("lat_origin",latOrigin);
         map.put("lon_destination",lonDestination);
-        map.put("lan_destination",lanDestination);
+        map.put("lat_destination",latDestination);
 
-        String response = clientBean.getObject().doPostWithParam(map, "");
+        String response = clientBean.getObject().doPostWithParam(map, "http://192.168.1.100:8080/taxi/api/v1.0/GetRoute");
 
         log.info("树蛙响应信息："+response);
 

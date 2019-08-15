@@ -28,11 +28,11 @@ public interface RoutePlanService {
     /**
      * 获取路线
      * @param lonOrigin
-     * @param lanOrigin
+     * @param latOrigin
      * @param lonDestination
-     * @param lanDestination
+     * @param latDestination
      * @return
      */
-    Object getRoute(Float lonOrigin, Float lanOrigin, Float lonDestination, Float lanDestination) throws JsonProcessingException;
+    Object getRoute(Float lonOrigin, Float latOrigin, Float lonDestination, Float latDestination) throws JsonProcessingException;
 
 }
