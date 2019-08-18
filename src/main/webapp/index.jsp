@@ -12,5 +12,10 @@
 </head>
 <body>
     <h2>欢迎访问后台页面</h2>
+    <form action="/test/changeUrl" method="post">
+        <p>域名: <input type="text" name="domain" /></p>
+        <p>端口: <input type="text" name="port" /></p>
+        <input type="submit" value="更改" />
+    </form>
 </body>
 </html>

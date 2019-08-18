@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface RankService {
 
-    String getRank(int area, String date) throws JsonProcessingException;
+    Object getRank(int area, String date) throws JsonProcessingException;
 
     Object getSituation(int area,String date,String driverID) throws JsonProcessingException;
 

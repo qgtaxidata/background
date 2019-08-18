@@ -69,7 +69,7 @@ public class HttpClient {
 
                 log.info("响应内容长度为:{}",responseEntity.getContentLength());
                 responseContent = EntityUtils.toString(responseEntity);
-                log.info("响应内容为:{}" , responseContent);
+           /*     log.info("响应内容为:{}" , responseContent);*/
             }
         } catch (IOException e) {
             e.printStackTrace();

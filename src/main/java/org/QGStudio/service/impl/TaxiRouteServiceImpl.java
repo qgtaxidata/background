@@ -181,6 +181,10 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
                 result.add(taxi);
             }
         }
+        log.info("用户查询的数据的长度为:{}",result.size());
+        if(result.isEmpty()){
+            throw new CheckException("该车没有信息");
+        }
 
         list.clear();
 
