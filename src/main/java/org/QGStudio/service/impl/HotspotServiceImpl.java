@@ -57,7 +57,7 @@ public class HotspotServiceImpl implements HotspotService {
             e.printStackTrace();
             throw new CheckException("参数异常，请检查!");
         }
-        String reponse = clientBean.getObject().doPostWithParam(location,"http://192.168.1.101:8080/taxi/api/v1.1/HotSpot");
+        String reponse = clientBean.getObject().doPostWithParam(location,"http://192.168.1.103:8080/taxi/api/v1.1/HotSpot");
 
         if (VerifyUtil.isEmpty(reponse)) {
             throw new CheckException("网络通讯异常！请重试！");
