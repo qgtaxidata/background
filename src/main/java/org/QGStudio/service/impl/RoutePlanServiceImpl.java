@@ -93,7 +93,7 @@ public class RoutePlanServiceImpl implements RoutePlanService {
 
         String response = clientBean.getObject().doPostWithParam(map, HttpUrl.URL+"/taxi/api/v1.0/GetRoute");
 
-    /*    log.info("树蛙响应信息："+response);*/
+        log.info("树蛙响应信息："+response);
 
         if (VerifyUtil.isEmpty(response)) {
             throw new CheckException("网络通讯异常！请重试！");
