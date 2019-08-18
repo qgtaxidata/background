@@ -1,17 +1,27 @@
 package org.QGStudio.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.log4j.Log4j2;
+import org.QGStudio.correspond.HttpClient;
+import org.QGStudio.correspond.HttpUrl;
 import org.QGStudio.dao.AnalyseDao;
+import org.QGStudio.exception.CheckException;
 import org.QGStudio.model.Location;
 import org.QGStudio.model.Taxi;
 import org.QGStudio.service.AnalyseService;
 import org.QGStudio.util.GCJ02_WGS84;
 import org.QGStudio.util.TableUtil;
 import org.QGStudio.util.TimeUtil;
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName AnalyseServiceImpl
@@ -21,10 +31,16 @@ import java.util.List;
  * @Version 1.0
  */
 @Service
+@Log4j2
 public class AnalyseServiceImpl implements AnalyseService {
 
     @Autowired
     private AnalyseDao analyseDao;
+
+    @Autowired
+    private ObjectFactory<HttpClient> clientBean;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public List analyseTaxi(double maxLon, double minLon, double maxLat, double minLat, String time) {
@@ -64,5 +80,60 @@ public class AnalyseServiceImpl implements AnalyseService {
         System.out.println("载客频率为："+ counts*1.0/taxis.size());
 
         return null;
+    }
+
+    @Override
+    public Object analyseBillboard(int area, int targetTime, int targetDay) {
+        if (area == 0){
+            log.info("用户选择全广州");
+            throw new CheckException("暂不支持全广州推荐广告牌");
+        }
+        Map<String , Object> map = new HashMap<>();
+        map.put("area", area);
+        map.put("targetTime", targetTime);
+        map.put("targetDay",targetDay);
+        log.info("用户进行查询广告牌推荐，输入的数据为：{}",map);
+        String response = null;
+        try {
+            response = clientBean.getObject().doPostWithParam(map, HttpUrl.URL+"/taxi/api/v1.0/GetBillboard");
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new CheckException("网络通信异常，请稍后重试!");
+        }
+        log.info("收到树蛙回复，内容长度为：{}", response.length());
+        Object object = null;
+        try {
+            object = objectMapper.readValue(response,Object.class);
+            log.info(object);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new CheckException("网络通信异常，请稍后重试!");
+        }
+        return object;
+    }
+
+    @Override
+    public Object analyseIncome(int area, String date) {
+        Map<String ,Object> map = new HashMap<>();
+        map.put("area",area);
+        map.put("date", date);
+        log.info("用户进行收入分析，输入数据为{}",map);
+        String response = null;
+        try {
+            response = clientBean.getObject().doPostWithParam(map, HttpUrl.URL+"/taxi/api/v1.0/GetIncomePrediction");
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new CheckException("网络通信异常，请稍后重试!");
+        }
+        log.info("收到树蛙回复，内容长度为：{}", response.length());
+        Object object = null;
+        try {
+            object = objectMapper.readValue(response,Object.class);
+            log.info(object);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new CheckException("网络通信异常，请稍后重试!");
+        }
+        return object;
     }
 }
