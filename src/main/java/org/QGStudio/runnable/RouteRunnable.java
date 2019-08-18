@@ -68,7 +68,7 @@ public class RouteRunnable implements Runnable{
         log.info("开始查询数据库,现在为{}",start);
         List<TaxiLocation> taxiLocations = routeDao.findTaxiLocation(table, startTime, endTime);
         long end = System.currentTimeMillis();
-        log.info("查询数据库完成，共用时{}",end - start);
+        log.info("查询数据库完成，共用时{},大小为{}",end - start,taxiLocations.size());
 
         start = System.currentTimeMillis();
         log.info("开始处理数据,现在为:{}",start);
