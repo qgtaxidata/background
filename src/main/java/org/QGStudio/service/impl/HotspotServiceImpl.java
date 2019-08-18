@@ -1,9 +1,9 @@
 package org.QGStudio.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.QGStudio.correspond.HttpClient;
+import org.QGStudio.correspond.HttpUrl;
 import org.QGStudio.exception.CheckException;
 import org.QGStudio.model.Location;
 import org.QGStudio.service.HotspotService;
@@ -16,9 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @description 热点推荐
@@ -57,7 +55,7 @@ public class HotspotServiceImpl implements HotspotService {
             e.printStackTrace();
             throw new CheckException("参数异常，请检查!");
         }
-        String reponse = clientBean.getObject().doPostWithParam(location,"http://192.168.1.101:8080/taxi/api/v1.1/HotSpot");
+        String reponse = clientBean.getObject().doPostWithParam(location, HttpUrl.URL+"/taxi/api/v1.1/HotSpot");
 
         if (VerifyUtil.isEmpty(reponse)) {
             throw new CheckException("网络通讯异常！请重试！");

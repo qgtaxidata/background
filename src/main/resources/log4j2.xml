@@ -9,7 +9,10 @@
 
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout charset="GBK" pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+            <PatternLayout charset="UTF-8" pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
         </Console>
 
         <RollingFile name="running-log" fileName="${LOG_HOME}/runLogs/${FILE_NAME}-${date:yyyy-MM-dd}.log"
@@ -52,9 +55,6 @@
                         <AppenderRef ref="Console" />-->
             <!-- 错误日志 -->
             <AppenderRef ref="error-log"/>
-            <AppenderRef ref="Console"/>
-        </Root>
-        <Root level="info">
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>
