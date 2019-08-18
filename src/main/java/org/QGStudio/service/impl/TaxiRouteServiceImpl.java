@@ -104,7 +104,7 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
         }
 
         // 建立6条线程 以10分钟为粒度对一小时的车辆进行检索
-        for (int i = 0 ; i < 6; i++) {
+        for (int i = 5 ; i >= 0; i--) {
 
             Date start = new Date();
             Date end = new Date();

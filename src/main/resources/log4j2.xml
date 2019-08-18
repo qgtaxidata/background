@@ -50,7 +50,9 @@
 
         <Root level="DEBUG">
             <!-- 这里是输入到文件，很重要-->
+<!--
             <AppenderRef ref="running-log" />
+-->
             <!--            &lt;!&ndash; 这里是输入到控制台&ndash;&gt;
                         <AppenderRef ref="Console" />-->
             <!-- 错误日志 -->
