@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.QGStudio.correspond.HttpClient;
+import org.QGStudio.correspond.HttpUrl;
 import org.QGStudio.exception.CheckException;
 import org.QGStudio.service.AreaRequirementService;
 import org.QGStudio.util.VerifyUtil;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,7 +45,8 @@ public class AreaRequirementServiceImpl implements AreaRequirementService {
 
         String response = null;
         try {
-            response = clientBean.getObject().doPostWithParam(map,"http://192.168.31.89:8080//taxi/api/v1.0/Demand");
+            System.out.println(HttpUrl.URL);
+            response = clientBean.getObject().doPostWithParam(map, HttpUrl.URL+"/taxi/api/v1.0/Demand");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             throw new CheckException("网络通信异常，请稍后重试!");
