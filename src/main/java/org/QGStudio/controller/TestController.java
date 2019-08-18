@@ -2,13 +2,12 @@ package org.QGStudio.controller;
 
 import ch.hsr.geohash.BoundingBox;
 import ch.hsr.geohash.GeoHash;
-import ch.hsr.geohash.WGS84Point;
+import org.QGStudio.correspond.HttpUrl;
 import org.QGStudio.dao.LocationDao;
 import org.QGStudio.dao.TestDao;
 import org.QGStudio.dtos.ResultBean;
 import org.QGStudio.model.*;
 import org.QGStudio.service.TestService;
-import org.QGStudio.util.GCJ02_WGS84;
 import org.QGStudio.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -66,5 +65,11 @@ public class TestController {
             locations.addAll(locationDao.findLocation("gpsdata4",boundingBox.getMaxLon(),boundingBox.getMinLon(),boundingBox.getMaxLat(),boundingBox.getMinLat(),startTime,endTime));
         }
         return new ResultBean<>(locations);
+    }
+
+    @PostMapping("/changeUrl")
+    public ResultBean<?> changeUrl(@RequestParam String domain,@RequestParam String port){
+        HttpUrl.setUrl(domain, port);
+        return new ResultBean<>();
     }
 }

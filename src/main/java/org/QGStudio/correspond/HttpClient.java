@@ -50,7 +50,7 @@ public class HttpClient {
         HttpPost httpPost = new HttpPost(url);
         // 转换成json对象
         StringEntity entity = new StringEntity(objectMapper.writeValueAsString(object), "UTF-8");
-        log.info("请求内容: "+entity);
+        log.info("请求内容: "+entity.toString());
         // 加入post请求中
         httpPost.setEntity(entity);
         // 设置请求头
@@ -69,7 +69,7 @@ public class HttpClient {
 
                 log.info("响应内容长度为:{}",responseEntity.getContentLength());
                 responseContent = EntityUtils.toString(responseEntity);
-                log.info("响应内容为:{}" , responseContent);
+           /*     log.info("响应内容为:{}" , responseContent);*/
             }
         } catch (IOException e) {
             e.printStackTrace();

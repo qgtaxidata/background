@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.QGStudio.correspond.HttpClient;
+import org.QGStudio.correspond.HttpUrl;
 import org.QGStudio.exception.CheckException;
 import org.QGStudio.service.RankService;
 import org.QGStudio.util.VerifyUtil;
@@ -43,7 +44,7 @@ public class RankServiceImpl implements RankService {
         Map<String,Object> map = new HashMap<>();
         map.put("area",area);
         map.put("date",date);
-        String response = clientBean.getObject().doPostWithParam(map,"http://192.168.31.89:8080/taxi/api/v1.0/IncomeRank");
+        String response = clientBean.getObject().doPostWithParam(map, HttpUrl.URL+"/taxi/api/v1.0/IncomeRank");
 
         if (VerifyUtil.isEmpty(response)) {
             throw new CheckException("网络通讯异常！请重试！");
@@ -76,7 +77,7 @@ public class RankServiceImpl implements RankService {
         map.put("driverID",driverID);
 
         String response = clientBean.getObject().doPostWithParam(map,
-                "http://192.168.31.89:8080/taxi/api/v1.0/GetDriverInfo");
+                HttpUrl.URL+"/taxi/api/v1.0/GetDriverInfo");
 
         log.info("树蛙响应信息："+response);
 
