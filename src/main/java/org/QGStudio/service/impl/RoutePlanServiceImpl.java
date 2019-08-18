@@ -57,7 +57,7 @@ public class RoutePlanServiceImpl implements RoutePlanService {
             throw new CheckException("路线id不能为空！");
         }
         // todo 未完成
-        String response = clientBean.getObject().doPostWithParam(new Object[]{time, routeId},"http://192.168.1.100:8080");
+        String response = clientBean.getObject().doPostWithParam(new Object[]{time, routeId},"http://192.168.1.103:8080");
         if (VerifyUtil.isEmpty(response)) {
             throw new CheckException("网络通讯异常！请重试！");
         }
@@ -91,7 +91,7 @@ public class RoutePlanServiceImpl implements RoutePlanService {
         map.put("lon_destination",lonDestination);
         map.put("lat_destination",latDestination);
 
-        String response = clientBean.getObject().doPostWithParam(map, "http://192.168.1.100:8080/taxi/api/v1.0/GetRoute");
+        String response = clientBean.getObject().doPostWithParam(map, "http://192.168.1.103:8080//taxi/api/v1.0/GetRoute");
 
         log.info("树蛙响应信息："+response);
 
@@ -137,7 +137,7 @@ public class RoutePlanServiceImpl implements RoutePlanService {
         end = DigitUtil.checkLocationDigit(end);
 
         // todo 未确定
-        String response = clientBean.getObject().doPostWithParam(new Object[]{start,end},"http://192.168.1.101:8080");
+        String response = clientBean.getObject().doPostWithParam(new Object[]{start,end},"http://192.168.1.103:8080");
 
         if (VerifyUtil.isEmpty(response)) {
             throw new CheckException("网络通讯异常！请重试！");
