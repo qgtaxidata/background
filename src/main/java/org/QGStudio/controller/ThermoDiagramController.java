@@ -35,12 +35,12 @@ public class ThermoDiagramController {
         return new ResultBean<>(thermoDiagramService.findHeadMap(maxLon, minLon, maxLat, minLat, time));
     }
 
-    @PostMapping("/getAreaMap")
+    @RequestMapping("/getAreaMap")
     public ResultBean<?> getAreaMap(@RequestParam("area") int area,@RequestParam("time") String time){
         return new ResultBean<>(thermoDiagramService.findMapNow(area,time));
     }
 
-    @PostMapping("/getFutureMap")
+    @RequestMapping("/getFutureMap")
     public ResultBean<?> getFutureMap(@RequestParam("nowTime") String nowTime,@RequestParam("futureTime") String futureTime,@RequestParam("area") int area,
                                       @RequestParam("algorithm") int algorithm) throws IOException {
 
