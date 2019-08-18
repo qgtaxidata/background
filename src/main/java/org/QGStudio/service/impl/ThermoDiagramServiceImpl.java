@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.QGStudio.correspond.HttpClient;
+import org.QGStudio.correspond.HttpUrl;
 import org.QGStudio.dao.LocationDao;
 import org.QGStudio.exception.CheckException;
 import org.QGStudio.model.AreaLocation;
@@ -219,7 +220,7 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
         heatMap.put("area",area);
         heatMap.put("algorithm",algorithm);
         heatMap.put("heat",statisticalGeohashWeight(locations));
-        String response = clientBean.getObject().doPostWithParam(heatMap,"http://192.168.1.101:8080//taxi/api/v1.0/FutureHeat");
+        String response = clientBean.getObject().doPostWithParam(heatMap, HttpUrl.URL+"/taxi/api/v1.0/FutureHeat");
 
         if (VerifyUtil.isEmpty(response)){
             throw new CheckException("网络通讯异常，请稍后重试!");
