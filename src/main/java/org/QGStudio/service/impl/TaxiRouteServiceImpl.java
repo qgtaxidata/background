@@ -45,7 +45,6 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
 
     private DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-
     @Override
     public List findTaxi(String time , int area) throws ParseException {
 
@@ -75,7 +74,6 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
 
     @Override
     public List<TaxiLocation> findRoute(TaxiLocation taxiLocation) throws ParseException {
-
         if (VerifyUtil.isNull(taxiLocation)) {
             throw new CheckException("请输入正确的数据!");
         }
@@ -95,16 +93,16 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
         String table = TableUtil.getGpsdataTable(startTime);
 
         //结果集
-        Map<Integer,List<TaxiLocation>> map = new HashMap<>();
+        Map<Integer, List<TaxiLocation>> map = new HashMap<>();
 
         // 建立结果集
         for (int i = 0; i < 6; i++) {
 
-            map.put(i,new ArrayList<>());
+            map.put(i, new ArrayList<>());
         }
 
         // 建立6条线程 以10分钟为粒度对一小时的车辆进行检索
-        for (int i = 5 ; i >= 0; i--) {
+        for (int i = 5; i >= 0; i--) {
 
             Date start = new Date();
             Date end = new Date();
@@ -112,15 +110,24 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
             end.setTime(endTime.getTime());
 
 
-            start.setMinutes(start.getMinutes() - 10 * ( i + 1));
+            start.setMinutes(start.getMinutes() - 10 * (i + 1));
             end.setMinutes(end.getMinutes() - 10 * i);
 
-            log.info("开始时间为:{}",startTime);
-            executor.execute(new RouteRunnable(countDownLatch,map.get(i),start,end,table,taxiLocation.getLicenseplateno()));
+            log.info("开始时间为:{}", startTime);
+            executor.execute(new RouteRunnable(countDownLatch, map.get(i), start, end, table, taxiLocation.getLicenseplateno()));
+
         }
 
         try {
-            if ( ! countDownLatch.await(60,TimeUnit.SECONDS)) {
+            if (!countDownLatch.await(60, TimeUnit.SECONDS)) {
+
+                for (int i = 5; i >= 0; i--) {
+
+                    // 清空数据,交由GC回收内存
+                    map.get(i).clear();
+                    map.remove(i);
+
+                }
                 throw new CheckException("查询超时,请稍后重试");
             }
         } catch (InterruptedException e) {
@@ -130,7 +137,7 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
 
         // 筛选数据
         long time1 = System.currentTimeMillis();
-        log.info("开始处理:{}",time1);
+        log.info("开始处理:{}", time1);
 
         List<TaxiLocation> routs = new ArrayList<>();
         for (int i = 5; i >= 0; i--) {
@@ -138,6 +145,7 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
             routs.addAll(map.get(i));
             // 清空数据,交由GC回收内存
             map.get(i).clear();
+            map.remove(i);
         }
         for (TaxiLocation taxi :
                 routs) {
@@ -145,7 +153,7 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
         }
 
         long time2 = System.currentTimeMillis();
-        log.info("处理结束：{}",time2);
+        log.info("处理结束：{}", time2);
         return routs;
 
     }
