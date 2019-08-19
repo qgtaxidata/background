@@ -37,4 +37,13 @@ public interface AnalyseService {
      * @date : 2019-08-18 17:17
      */
     Object analyseIncome(int area, String date);
+
+    /**
+     * @title : 根据地区，时间进行车辆利用率分析
+     * @param :[area, date]
+     * @return : java.lang.Object
+     * @author : huange7
+     * @date : 2019-08-18 22:19
+     */
+    Object getVehicleUtilizationRate(int area, String date);
 }

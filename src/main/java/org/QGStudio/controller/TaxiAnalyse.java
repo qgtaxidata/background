@@ -36,4 +36,9 @@ public class TaxiAnalyse {
     public ResultBean<?> analyseIncome(@RequestParam("area")int area, @RequestParam("date")String date){
         return new ResultBean<>(analyseService.analyseIncome(area,date));
     }
+
+    @RequestMapping("/vehicleUtilizationRate")
+    public ResultBean<?> getVehicleUtilizationRate(@RequestParam("area")int area, @RequestParam("date")String date){
+        return new ResultBean<>(analyseService.getVehicleUtilizationRate(area, date));
+    }
 }
