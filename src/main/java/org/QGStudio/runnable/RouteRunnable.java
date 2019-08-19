@@ -81,6 +81,8 @@ public class RouteRunnable implements Runnable{
         end = System.currentTimeMillis();
         log.info("数据处理完毕，用时:{}",end - start);
         taxiLocations.clear();
+        taxiLocations = null;
         countDownLatch.countDown();
+        return;
     }
 }
