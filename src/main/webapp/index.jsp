@@ -6,14 +6,59 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!DOCTYPE html><html lang=cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><link rel=icon href=favicon.ico><link rel=stylesheet href=./resetStyle.css><script>function resizeRem() {
-var whdef = 100 / 1920;
-// 根据设计稿的宽高和屏幕的宽度定义Rem的值
-var wH = window.screen.availHeight;
-var wW = window.screen.availWidth;
-var rem = wW * whdef;
-// window.rem = rem;
-document.documentElement.style.fontSize = rem + 'px';
-}
-// window.onresize = resizeRem;
-resizeRem();</script><title>你的生活，我的梦</title><link href=css/app.4ccda9d3.css rel=preload as=style><link href=js/app.b70b61fe.js rel=preload as=script><link href=js/chunk-vendors.a36162f5.js rel=preload as=script><link href=css/app.4ccda9d3.css rel=stylesheet></head><body><noscript><strong>We're sorry but qg-ow doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=app></div><script src=js/chunk-vendors.a36162f5.js></script><script src=js/app.b70b61fe.js></script></body></html>
+<html>
+<head>
+    <title>后台开发者界面</title>
+</head>
+<style>
+    input[type=text], select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    input[type=submit] {
+        width: 100%;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+        background-color: #45a049;
+    }
+
+    div {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+        position: relative;
+        top: 22%;
+    }
+</style>
+<body>
+
+<h3 style="position: relative;left: 39%;top: 17%;font-size: 45px;">欢迎使用后台开发者界面</h3>
+
+<div>
+    <form action="/test/changeUrl" method="post">
+        <label for="fname">域</label>
+        <input type="text" id="fname" name="domain" placeholder="Your domain..">
+
+        <label for="lname">端口</label>
+        <input type="text" id="lname" name="port" placeholder="Your port..">
+
+        <input type="submit" value="修改">
+    </form>
+</div>
+
+</body>
+</html>
