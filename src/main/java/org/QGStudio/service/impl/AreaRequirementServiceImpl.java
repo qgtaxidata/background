@@ -45,7 +45,6 @@ public class AreaRequirementServiceImpl implements AreaRequirementService {
 
         String response = null;
         try {
-            System.out.println(HttpUrl.URL);
             response = clientBean.getObject().doPostWithParam(map, HttpUrl.URL+"/taxi/api/v1.0/Demand");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
