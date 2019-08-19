@@ -8,14 +8,57 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>后台开发者界面</title>
 </head>
+<style>
+    input[type=text], select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    input[type=submit] {
+        width: 100%;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+        background-color: #45a049;
+    }
+
+    div {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+        position: relative;
+        top: 22%;
+    }
+</style>
 <body>
-    <h2>欢迎访问BUG联盟开发者界面</h2>
+
+<h3 style="position: relative;left: 39%;top: 17%;font-size: 45px;">欢迎使用后台开发者界面</h3>
+
+<div>
     <form action="/test/changeUrl" method="post">
-        <p>域名: <input type="text" name="domain" /></p>
-        <p>端口: <input type="text" name="port" /></p>
-        <input type="submit" value="更改" />
+        <label for="fname">域</label>
+        <input type="text" id="fname" name="domain" placeholder="Your domain..">
+
+        <label for="lname">端口</label>
+        <input type="text" id="lname" name="port" placeholder="Your port..">
+
+        <input type="submit" value="修改">
     </form>
+</div>
+
 </body>
 </html>

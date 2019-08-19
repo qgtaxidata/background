@@ -136,4 +136,29 @@ public class AnalyseServiceImpl implements AnalyseService {
         }
         return object;
     }
+
+    @Override
+    public Object getVehicleUtilizationRate(int area, String date) {
+        Map<String ,Object> map = new HashMap<>();
+        map.put("area",area);
+        map.put("date", date);
+        log.info("用户进行收入分析，输入数据为{}",map);
+        String response = null;
+        try {
+            response = clientBean.getObject().doPostWithParam(map, HttpUrl.URL+"/taxi/api/v1.0/GetTaxiUtilization");
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new CheckException("网络通信异常，请稍后重试!");
+        }
+        log.info("收到树蛙回复，内容长度为：{}", response.length());
+        Object object = null;
+        try {
+            object = objectMapper.readValue(response,Object.class);
+            log.info(object);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new CheckException("网络通信异常，请稍后重试!");
+        }
+        return object;
+    }
 }
