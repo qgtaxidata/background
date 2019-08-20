@@ -1,7 +1,6 @@
 package org.QGStudio.util;
 
-import javax.xml.crypto.Data;
-import java.time.Month;
+import lombok.extern.log4j.Log4j2;
 import java.util.Date;
 import java.util.Objects;
 
@@ -12,6 +11,7 @@ import java.util.Objects;
  * @Date 2019-08-09 9:59
  * @Version 1.0
  */
+@Log4j2
 public class TableUtil {
 
     public static String getGpsdataTable(Date date) {
