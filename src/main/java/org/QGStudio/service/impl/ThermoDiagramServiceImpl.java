@@ -22,6 +22,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.lang.annotation.Target;
+import java.sql.Time;
 import java.text.ParseException;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
@@ -185,14 +187,17 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
         Date endTime = TimeUtil.StrToDate(time);
         startTime.setSeconds(startTime.getSeconds() - 15);
 
-        String table = TableUtil.getGpsdataTable(startTime);
 
         log.info("用户查询地区{}", area);
         Location maxLocation = AreaLocation.MAX_MAP.get(area);
         Location minLocation = AreaLocation.MIN_MAP.get(area);
         log.info("查询的地区数据为:{}", AreaLocation.MAX_MAP.get(area).toString());
-        List<LocationWithHeight> locations = locationDao.findLocation(table, maxLocation.getLongitude(), minLocation.getLongitude(),
-                maxLocation.getLatitude(), minLocation.getLatitude(), startTime, endTime);
+
+        Date newTime = TimeUtil.isCrossDay(endTime, time);
+
+        List<LocationWithHeight> locations = new LinkedList<>();
+
+       findLocationList(startTime, endTime, newTime, minLocation, maxLocation, locations);
 
         return statisticalWeight(locations);
     }
@@ -206,14 +211,18 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
         Date endTime = TimeUtil.StrToDate(nowTime);
         startTime.setSeconds(startTime.getSeconds() - 15);
 
-        String table = TableUtil.getGpsdataTable(startTime);
+        Date newTime = TimeUtil.isCrossDay(endTime, nowTime);
+
 
         log.info("用户执行查询{}地区未来热力图", area);
         Location minLocation = AreaLocation.MIN_MAP.get(area);
         Location maxLocation = AreaLocation.MAX_MAP.get(area);
         log.info("查询的地区数据为:{}", AreaLocation.MAX_MAP.get(area).toString());
-        List<LocationWithHeight> locations = locationDao.findLocation(table, maxLocation.getLongitude(), minLocation.getLongitude(),
-                maxLocation.getLatitude(), minLocation.getLatitude(), startTime, endTime);
+
+        List<LocationWithHeight> locations = new LinkedList<>();
+
+        findLocationList(startTime, endTime, newTime, minLocation, maxLocation, locations);
+
         Map<String,Object> heatMap = new HashMap<>();
         heatMap.put("nowTime",nowTime);
         heatMap.put("futureTime",futureTime);
@@ -306,5 +315,31 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
         }
         log.info("用户查询成功，数据大小为{}", points.size());
         return points;
+    }
+
+    private void findLocationList(Date startTime, Date endTime, Date newTime, Location minLocation, Location maxLocation, List locations){
+        String table;
+        if ( ! VerifyUtil.isNull(newTime) ){
+
+            log.info("用户执行查询出现跨表操作");
+            table = TableUtil.getGpsdataTable(startTime);
+
+            List<LocationWithHeight> locationFront = locationDao.findLocation(table, maxLocation.getLongitude(), minLocation.getLongitude(),
+                    maxLocation.getLatitude(), minLocation.getLatitude(), startTime,newTime );
+
+            table = TableUtil.getGpsdataTable(endTime);
+
+            List<LocationWithHeight> locationAfter = locationDao.findLocation(table, maxLocation.getLongitude(), minLocation.getLongitude(),
+                    maxLocation.getLatitude(), minLocation.getLatitude(), newTime,endTime );
+
+            locations.addAll(locationAfter);
+            locations.addAll(locationFront);
+        }else {
+
+            table = TableUtil.getGpsdataTable(startTime);
+            locations.addAll(locationDao.findLocation(table, maxLocation.getLongitude(), minLocation.getLongitude(),
+                    maxLocation.getLatitude(), minLocation.getLatitude(), startTime,endTime ));
+
+        }
     }
 }

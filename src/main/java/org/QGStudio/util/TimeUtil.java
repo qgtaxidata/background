@@ -12,7 +12,6 @@ import java.util.Date;
  * @author < a href=" ">郭沛</ a>
  * @date 2019-08-08 21:36
  */
-@Log4j2
 public class TimeUtil {
 
     public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -36,5 +35,25 @@ public class TimeUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * @title : 判断时间是否跨天
+     * @param :[startTime, endTime, time]
+     * @return : int
+     * @author : huange7
+     * @date : 2019-08-20 9:13
+     */
+    public static Date isCrossDay(Date endTime, String time){
+        Date newTime = TimeUtil.StrToDate(time);
+        newTime.setHours(0);
+        newTime.setMinutes(0);
+        newTime.setSeconds(15);
+        if (endTime.before(newTime)){
+            newTime.setSeconds(0);
+            return newTime;
+        }else{
+            return null;
+        }
     }
 }
