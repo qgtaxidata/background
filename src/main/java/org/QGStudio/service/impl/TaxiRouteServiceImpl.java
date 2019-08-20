@@ -45,6 +45,10 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
 
     private DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    private final static Map<String,List<TaxiLocation>> taxiMap = new HashMap<String, List<TaxiLocation>>();
+
+    private  volatile static boolean isFinding = false;
+
     @Override
     public List findTaxi(String time , int area) throws ParseException {
 
@@ -56,7 +60,7 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
         // 获取开始时间和结束时间
         Date startTime = null;
         Date endTime = null;
-
+        taxiMap.clear();
         log.info("{}{}",maxLocation,minLocation);
         startTime = format.parse(time);
         endTime = format.parse(time);
@@ -65,15 +69,29 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
         // 获得表名
         String table = TableUtil.getGpsdataTable(startTime);
 
-        List list = routeDao.findTaxi(table,startTime,endTime,maxLocation.getLongitude(),
+        taxiMap.keySet().forEach(taxi ->{
+            if (taxiMap.get(taxi) != null){
+                taxiMap.get(taxi).clear();
+            }
+        });
+        taxiMap.clear();
+        List<TaxiLocation> list = routeDao.findTaxi(table,startTime,endTime,maxLocation.getLongitude(),
                 minLocation.getLongitude(),maxLocation.getLatitude(),minLocation.getLatitude());
 
+        list.forEach(taxi ->{
+            taxiMap.put(taxi.getLicenseplateno(),null);
+        });
         log.info("查询的返回结果数量为：{}", list.size());
         return list;
     }
 
     @Override
     public List<TaxiLocation> findRoute(TaxiLocation taxiLocation) throws ParseException {
+
+        if ( isFinding ){
+            throw new CheckException("服务器正在生成路径，请稍后再请求");
+        }
+        isFinding = true;
         if (VerifyUtil.isNull(taxiLocation)) {
             throw new CheckException("请输入正确的数据!");
         }
@@ -82,6 +100,10 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
         }
         if (VerifyUtil.isEmpty(taxiLocation.getTime())) {
             throw new CheckException("请输入正确的时间!");
+        }
+        if ( taxiMap.get(taxiLocation.getLicenseplateno()) != null){
+            log.info("路径可视化模块在缓存中发现数据,大小为{}",taxiMap.get(taxiLocation.getLicenseplateno()).size());
+            return taxiMap.get(taxiLocation.getLicenseplateno());
         }
         // 开始时间，结束时间
         Date startTime = format.parse(taxiLocation.getTime());
@@ -119,15 +141,14 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
         }
 
         try {
-            if (!countDownLatch.await(60, TimeUnit.SECONDS)) {
+            if (!countDownLatch.await(120, TimeUnit.SECONDS)) {
 
-                for (int i = 5; i >= 0; i--) {
-
-                    // 清空数据,交由GC回收内存
-                    map.get(i).clear();
-                    map.remove(i);
-
-                }
+                long time1 = System.currentTimeMillis();
+                log.info("路径可视化查询超时但开始建立缓存:{}", time1);
+                creatCache(map);
+                long time2 = System.currentTimeMillis();
+                log.info("路径可视化超时缓存建立结束：{}", time2);
+                isFinding = false;
                 throw new CheckException("查询超时,请稍后重试");
             }
         } catch (InterruptedException e) {
@@ -137,24 +158,12 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
 
         // 筛选数据
         long time1 = System.currentTimeMillis();
-        log.info("开始处理:{}", time1);
-
-        List<TaxiLocation> routs = new ArrayList<>();
-        for (int i = 5; i >= 0; i--) {
-
-            routs.addAll(map.get(i));
-            // 清空数据,交由GC回收内存
-            map.get(i).clear();
-            map.remove(i);
-        }
-        for (TaxiLocation taxi :
-                routs) {
-            GCJ02_WGS84.wgs84_To_Gcj02(taxi);
-        }
-
+        log.info("路径可视化开始建立缓存:{}", time1);
+        creatCache(map);
         long time2 = System.currentTimeMillis();
-        log.info("处理结束：{}", time2);
-        return routs;
+        log.info("路径可视化缓存建立结束：{}", time2);
+        isFinding = false;
+        return taxiMap.get(taxiLocation.getLicenseplateno());
 
     }
 
@@ -193,10 +202,32 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
         if(result.isEmpty()){
             throw new CheckException("该车没有信息");
         }
-
         list.clear();
-
         return result;
 
+    }
+
+    private void creatCache(Map<Integer, List<TaxiLocation>> map){
+
+
+        taxiMap.keySet().forEach(taxi->{
+
+            List<TaxiLocation> resultList = new ArrayList<>();
+            for (int i = 5; i >= 0; i--) {
+
+                map.get(i).forEach(result ->{
+                    if ( result.getLicenseplateno().equals(taxi)){
+                        GCJ02_WGS84.wgs84_To_Gcj02(result);
+                        resultList.add(result);
+                    }
+                });
+            }
+            taxiMap.put(taxi,resultList);
+        });
+        for (int i = 0; i < map.size(); i++) {
+            map.get(i).clear();
+            map.put(i,null);
+        }
+        map.clear();
     }
 }

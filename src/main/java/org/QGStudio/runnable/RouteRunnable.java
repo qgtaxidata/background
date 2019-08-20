@@ -66,22 +66,11 @@ public class RouteRunnable implements Runnable{
         log.info("线程中的数据为{},{},{}",table,startTime,endTime);
         long start = System.currentTimeMillis();
         log.info("开始查询数据库,现在为{}",start);
-        List<TaxiLocation> taxiLocations = routeDao.findTaxiLocation(table, startTime, endTime);
+        List<TaxiLocation> list = routeDao.findTaxiLocation(table, startTime, endTime);
         long end = System.currentTimeMillis();
-        log.info("查询数据库完成，共用时{},大小为{}",end - start,taxiLocations.size());
-
-        start = System.currentTimeMillis();
-        log.info("开始处理数据,现在为:{}",start);
-        for (TaxiLocation taxi :
-                taxiLocations) {
-            if ( licenseplateno.equals(taxi.getLicenseplateno())){
-                resultList.add(taxi);
-            }
-        }
-        end = System.currentTimeMillis();
-        log.info("数据处理完毕，用时:{}",end - start);
-        taxiLocations.clear();
-        taxiLocations = null;
+        resultList.addAll(list);
+        list.clear();
+        log.info("查询数据库完成，共用时{},大小为{}",end - start,resultList.size());
         countDownLatch.countDown();
         return;
     }
