@@ -43,7 +43,6 @@ public class ControllerAop {
 
         // 已知异常
         if (e instanceof CheckException) {
-
             result.setMsg(e.getLocalizedMessage());
             result.setCode(ResultBean.FAIL);
         } else if (e instanceof NullPointerException) {
