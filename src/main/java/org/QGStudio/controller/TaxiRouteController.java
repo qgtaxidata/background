@@ -9,6 +9,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 
 /**
@@ -30,8 +32,12 @@ public class TaxiRouteController {
     private TaxiRouteService taxiRouteService;
 
     @GetMapping("/findTaxi")
-    public ResultBean<?> findTaxi(@RequestParam("time") String time, @RequestParam("area") int area) throws ParseException {
+    public ResultBean<?> findTaxi(@RequestParam("time") String time, @RequestParam("area") int area ,HttpServletResponse response) throws ParseException {
 
+        Cookie cookie = new Cookie("taxiCookie","hanpi001");
+        cookie.setPath("/");
+        cookie.setMaxAge(60 * 5);
+        response.addCookie(cookie);
         return new ResultBean<>(taxiRouteService.findTaxi(time,area));
     }
     @PostMapping("/findRoute")
