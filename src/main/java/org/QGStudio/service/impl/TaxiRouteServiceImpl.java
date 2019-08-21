@@ -145,11 +145,7 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
         try {
             if (!countDownLatch.await(120, TimeUnit.SECONDS)) {
 
-                long time1 = System.currentTimeMillis();
-                log.info("路径可视化查询超时但开始建立缓存:{}", time1);
-                creatCache(map);
-                long time2 = System.currentTimeMillis();
-                log.info("路径可视化超时缓存建立结束：{}", time2);
+                log.info("历史路径可视化模块查询超时");
                 isFinding = false;
                 throw new CheckException("查询超时,请稍后重试");
             }
