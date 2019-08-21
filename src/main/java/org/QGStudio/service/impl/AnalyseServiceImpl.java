@@ -1,6 +1,8 @@
 package org.QGStudio.service.impl;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.QGStudio.correspond.HttpClient;
@@ -146,6 +148,61 @@ public class AnalyseServiceImpl implements AnalyseService {
         String response = null;
         try {
             response = clientBean.getObject().doPostWithParam(map, HttpUrl.URL+"/taxi/api/v1.0/GetTaxiUtilization");
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new CheckException("网络通信异常，请稍后重试!");
+        }
+        log.info("收到树蛙回复，内容长度为：{}", response.length());
+        Object object = null;
+        try {
+            object = objectMapper.readValue(response,Object.class);
+            log.info(object);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new CheckException("网络通信异常，请稍后重试!");
+        }
+        return object;
+    }
+
+    /**
+     * @title : 出租车异常分析
+     * @return : java.lang.Object
+     * @author : guo
+     * @date : 2019-08-20 20:13
+     */
+    @Override
+    public Object abnormalTaxiAnalysis() {
+
+        Map<String ,Object> map = new HashMap<>();
+        log.info("出租车异常分析",map);
+        String response = null;
+        try {
+            response = clientBean.getObject().doPostWithParam(map, HttpUrl.URL+"/taxi/api/v1.0/AbnormalTaxiAnalysis");
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new CheckException("网络通信异常，请稍后重试!");
+        }
+        log.info("收到树蛙回复，内容长度为：{}", response.length());
+        Object object = null;
+        try {
+            object = objectMapper.readValue(response, Object.class);
+            log.info(object);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new CheckException("网络通信异常，请稍后重试!");
+        }
+        return object;
+    }
+
+    @Override
+    public Object getRoadAnalysis(int area, String date) {
+        Map<String ,Object> map = new HashMap<>();
+        map.put("area",area);
+        map.put("date", date);
+        log.info("用户进行道路质量分析，输入数据为{}",map);
+        String response = null;
+        try {
+            response = clientBean.getObject().doPostWithParam(map, HttpUrl.URL+"/taxi/api/v1.0/RoadAnalysis");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             throw new CheckException("网络通信异常，请稍后重试!");
