@@ -71,6 +71,12 @@ public class RouteRunnable implements Runnable{
         resultList.addAll(list);
         list.clear();
         log.info("查询数据库完成，共用时{},大小为{}",end - start,resultList.size());
+
+        if ( countDownLatch.getCount() == 0 ){
+            resultList.clear();
+            resultList = null;
+            log.info("查询超时，线程中的数据开始清空");
+        }
         countDownLatch.countDown();
         return;
     }
