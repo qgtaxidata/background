@@ -46,4 +46,12 @@ public interface AnalyseService {
      * @date : 2019-08-18 22:19
      */
     Object getVehicleUtilizationRate(int area, String date);
+
+    /**
+     * @title : 出租车异常分析
+     * @return : java.lang.Object
+     * @author : guo
+     * @date : 2019-08-20 20:13
+     */
+    Object abnormalTaxiAnalysis();
 }
