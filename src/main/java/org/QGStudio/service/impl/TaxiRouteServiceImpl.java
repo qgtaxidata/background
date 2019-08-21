@@ -88,6 +88,7 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
     @Override
     public List<TaxiLocation> findRoute(TaxiLocation taxiLocation) throws ParseException {
 
+        log.info("初始状态位{}",isFinding);
         if ( isFinding ){
             throw new CheckException("服务器正在生成路径，请稍后再请求");
         }
@@ -103,6 +104,7 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
         }
         if ( taxiMap.get(taxiLocation.getLicenseplateno()) != null){
             log.info("路径可视化模块在缓存中发现数据,大小为{}",taxiMap.get(taxiLocation.getLicenseplateno()).size());
+            isFinding = false;
             return taxiMap.get(taxiLocation.getLicenseplateno());
         }
         // 开始时间，结束时间
@@ -163,6 +165,7 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
         long time2 = System.currentTimeMillis();
         log.info("路径可视化缓存建立结束：{}", time2);
         isFinding = false;
+        log.info("末状态位{}",isFinding);
         return taxiMap.get(taxiLocation.getLicenseplateno());
 
     }
