@@ -183,6 +183,10 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
     @Override
     public List findMapNow(int area, String time) {
 
+        if (VerifyUtil.isEmpty(time)){
+            throw new CheckException("请传入正确的时间");
+        }
+
         Date startTime = TimeUtil.StrToDate(time);
         Date endTime = TimeUtil.StrToDate(time);
         startTime.setSeconds(startTime.getSeconds() - 15);
@@ -206,6 +210,14 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
 
     @Override
     public Object findFutureMap(String nowTime, String futureTime, int area, int algorithm) throws IOException {
+
+        if (VerifyUtil.isEmpty(nowTime)){
+            throw new CheckException("请传入正确的当前时间");
+        }
+
+        if (VerifyUtil.isEmpty(futureTime)){
+            throw new CheckException("请传入正确的未来时间");
+        }
 
         Date startTime = TimeUtil.StrToDate(nowTime);
         Date endTime = TimeUtil.StrToDate(nowTime);

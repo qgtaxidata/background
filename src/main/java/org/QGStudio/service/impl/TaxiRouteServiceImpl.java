@@ -78,8 +78,8 @@ public class TaxiRouteServiceImpl implements TaxiRouteService {
         List<TaxiLocation> list = routeDao.findTaxi(table,startTime,endTime,maxLocation.getLongitude(),
                 minLocation.getLongitude(),maxLocation.getLatitude(),minLocation.getLatitude());
 
-        list.forEach(taxi ->{
-            taxiMap.put(taxi.getLicenseplateno(),null);
+        list.forEach(taxi -> {
+            taxiMap.put(taxi.getLicenseplateno(), null);
         });
         log.info("查询的返回结果数量为：{}", list.size());
         return list;
