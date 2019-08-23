@@ -60,8 +60,7 @@ public class HotspotServiceImpl implements HotspotService {
         if (VerifyUtil.isEmpty(reponse)) {
             throw new CheckException("网络通讯异常！请重试！");
         }
-
-        return  objectMapper.readValue(reponse,List.class);
+        return  objectMapper.readValue(reponse,Object.class);
 
     }
 }

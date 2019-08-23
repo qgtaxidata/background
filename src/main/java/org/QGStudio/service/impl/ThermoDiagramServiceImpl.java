@@ -189,7 +189,7 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
 
         Date startTime = TimeUtil.StrToDate(time);
         Date endTime = TimeUtil.StrToDate(time);
-        startTime.setSeconds(startTime.getSeconds() - 15);
+        startTime.setSeconds(startTime.getSeconds() - 45);
 
 
         log.info("用户查询地区{}", area);
@@ -221,7 +221,7 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
 
         Date startTime = TimeUtil.StrToDate(nowTime);
         Date endTime = TimeUtil.StrToDate(nowTime);
-        startTime.setSeconds(startTime.getSeconds() - 15);
+        startTime.setSeconds(startTime.getSeconds() - 45);
 
         Date newTime = TimeUtil.isCrossDay(endTime, nowTime);
 

@@ -39,6 +39,6 @@ public class HotspotController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new ResultBean<>(new CheckException("未知错误,请重试!"));
+        throw new CheckException("未知错误！请重试");
     }
 }

@@ -105,7 +105,8 @@ public class AnalyseServiceImpl implements AnalyseService {
         log.info("收到树蛙回复，内容长度为：{}", response.length());
         Object object = null;
         try {
-            object = objectMapper.readValue(response,Object.class);
+            object = objectMapper.
+                    readValue(response,Object.class);
             log.info(object);
         } catch (IOException e) {
             e.printStackTrace();
