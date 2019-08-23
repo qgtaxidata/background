@@ -192,6 +192,7 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
         startTime.setSeconds(startTime.getSeconds() - 45);
 
 
+
         log.info("用户查询地区{}", area);
         Location maxLocation = AreaLocation.MAX_MAP.get(area);
         Location minLocation = AreaLocation.MIN_MAP.get(area);
@@ -222,6 +223,7 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
         Date startTime = TimeUtil.StrToDate(nowTime);
         Date endTime = TimeUtil.StrToDate(nowTime);
         startTime.setSeconds(startTime.getSeconds() - 45);
+
 
         Date newTime = TimeUtil.isCrossDay(endTime, nowTime);
 

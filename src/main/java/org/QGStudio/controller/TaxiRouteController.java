@@ -35,6 +35,7 @@ public class TaxiRouteController {
     public ResultBean<?> findTaxi(@RequestParam("time") String time, @RequestParam("area") int area ,HttpServletResponse response) throws ParseException {
 
         Cookie cookie = new Cookie("taxiCookie","hanpi003");
+
         cookie.setMaxAge(60 * 5);
         response.addCookie(cookie);
         return new ResultBean<>(taxiRouteService.findTaxi(time,area));
