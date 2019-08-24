@@ -191,8 +191,6 @@ public class ThermoDiagramServiceImpl implements ThermoDiagramService {
         Date endTime = TimeUtil.StrToDate(time);
         startTime.setSeconds(startTime.getSeconds() - 45);
 
-
-
         log.info("用户查询地区{}", area);
         Location maxLocation = AreaLocation.MAX_MAP.get(area);
         Location minLocation = AreaLocation.MIN_MAP.get(area);
